@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "merchant_id": "cozy-vibe-demo",
+  "name": "Cozy Vibe Demo (synthetic)",
+  "market_country": "BD",
+  "base_currency": "BDT",
+  "source_countries": [
+    "CN"
+  ],
+  "allowed_marketplaces": [
+    "example.com"
+  ],
+  "preferred_categories": [
+    "ambient-lighting",
+    "desk-decor"
+  ],
+  "excluded_categories": [
+    "regulated-products"
+  ],
+  "constraints": {
+    "max_product_mass_g": "400",
+    "minimum_contribution_margin": "0.30",
+    "require_positive_conservative_margin": true
+  },
+  "freight": {
+    "mode": "per_gram",
+    "rate": "1.00",
+    "currency": "BDT",
+    "rate_basis": "billable_mass",
+    "minimum_charge": "0",
+    "customs_included": false
+  },
+  "finance": {
+    "fx_policy": "dated_source_required",
+    "import_tax_policy": "manual_verified_input",
+    "merchant_vat_treatment": "expense",
+    "max_fx_age_days": 30
+  },
+  "permissions": {
+    "read_only_research": true,
+    "outbound_messages": false,
+    "purchasing": false
+  }
+}

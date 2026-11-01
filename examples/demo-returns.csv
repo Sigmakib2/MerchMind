@@ -1,0 +1,2 @@
+return_id,product_id,quantity,reason_code,date,associated_cost
+return-demo-1,lamp-a,1,damaged,2026-11-01,100

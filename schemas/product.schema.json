@@ -1,0 +1,47 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "product_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Product Id",
+      "type": "string"
+    },
+    "name": {
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "category": {
+      "title": "Category",
+      "type": "string"
+    },
+    "variant": {
+      "minLength": 1,
+      "title": "Variant",
+      "type": "string"
+    },
+    "mass_g": {
+      "anyOf": [
+        {
+          "gt": 0,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Mass G"
+    }
+  },
+  "required": [
+    "product_id",
+    "name",
+    "category",
+    "variant"
+  ],
+  "title": "Product",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/product.schema.json"
+}

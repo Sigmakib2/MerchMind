@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "merchant_id": "cozy-vibe-demo",
+  "product_variant_key": "lamp-a:warm-usb",
+  "origin_country": "CN",
+  "destination_country": "BD",
+  "fx": {
+    "source_currency": "CNY",
+    "target_currency": "BDT",
+    "rate": "17",
+    "as_of": "2026-11-01T06:09:27.970103Z",
+    "evidence_id": "ev-6c1b07c4bcd66fd4359c3728"
+  },
+  "evidence_ids": [
+    "ev-0f1515797dd632bdb1fdb856"
+  ],
+  "scenarios": [
+    {
+      "name": "optimistic",
+      "unit_price_source": "10",
+      "mass_g": "180",
+      "packaging_mass_g": "20",
+      "mass": null,
+      "packaging_mass": null,
+      "volumetric_mass_g": null,
+      "fixed_sourcing_per_unit": "0",
+      "import_duties": "40",
+      "import_vat": "20",
+      "tax_inputs_confirmed": true,
+      "tax_evidence_ids": [
+        "ev-ec75b8779c98009b14e50229"
+      ],
+      "brokerage": "10",
+      "local_inbound": "15",
+      "other_import_costs": "5",
+      "selling_price_net": "1250",
+      "packaging": "20",
+      "fulfillment": "60",
+      "payment_fee": "15",
+      "marketing_cost": "80",
+      "expected_return_loss": "30"
+    },
+    {
+      "name": "base",
+      "unit_price_source": "11",
+      "mass_g": "180",
+      "packaging_mass_g": "20",
+      "mass": null,
+      "packaging_mass": null,
+      "volumetric_mass_g": null,
+      "fixed_sourcing_per_unit": "0",
+      "import_duties": "40",
+      "import_vat": "20",
+      "tax_inputs_confirmed": true,
+      "tax_evidence_ids": [
+        "ev-ec75b8779c98009b14e50229"
+      ],
+      "brokerage": "10",
+      "local_inbound": "15",
+      "other_import_costs": "5",
+      "selling_price_net": "1200",
+      "packaging": "20",
+      "fulfillment": "60",
+      "payment_fee": "15",
+      "marketing_cost": "100",
+      "expected_return_loss": "30"
+    },
+    {
+      "name": "conservative",
+      "unit_price_source": "12",
+      "mass_g": "180",
+      "packaging_mass_g": "20",
+      "mass": null,
+      "packaging_mass": null,
+      "volumetric_mass_g": null,
+      "fixed_sourcing_per_unit": "0",
+      "import_duties": "40",
+      "import_vat": "20",
+      "tax_inputs_confirmed": true,
+      "tax_evidence_ids": [
+        "ev-ec75b8779c98009b14e50229"
+      ],
+      "brokerage": "10",
+      "local_inbound": "15",
+      "other_import_costs": "5",
+      "selling_price_net": "1100",
+      "packaging": "20",
+      "fulfillment": "60",
+      "payment_fee": "15",
+      "marketing_cost": "150",
+      "expected_return_loss": "30"
+    }
+  ]
+}

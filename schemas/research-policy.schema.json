@@ -1,0 +1,50 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "max_requests_per_domain": {
+      "default": 3,
+      "maximum": 50,
+      "minimum": 2,
+      "title": "Max Requests Per Domain",
+      "type": "integer"
+    },
+    "max_response_bytes": {
+      "default": 1000000,
+      "maximum": 10000000,
+      "minimum": 1024,
+      "title": "Max Response Bytes",
+      "type": "integer"
+    },
+    "max_sources": {
+      "default": 20,
+      "maximum": 100,
+      "minimum": 1,
+      "title": "Max Sources",
+      "type": "integer"
+    },
+    "max_duration_minutes": {
+      "default": 30,
+      "maximum": 60,
+      "minimum": 1,
+      "title": "Max Duration Minutes",
+      "type": "integer"
+    },
+    "max_report_bytes": {
+      "default": 10000000,
+      "maximum": 100000000,
+      "minimum": 1024,
+      "title": "Max Report Bytes",
+      "type": "integer"
+    }
+  },
+  "title": "ResearchPolicy",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/research-policy.schema.json"
+}

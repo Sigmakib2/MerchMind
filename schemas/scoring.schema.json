@@ -1,0 +1,89 @@
+{
+  "$defs": {
+    "Weights": {
+      "additionalProperties": false,
+      "properties": {
+        "customer_fit": {
+          "default": "0.30",
+          "ge": 0,
+          "le": 1,
+          "title": "Customer Fit",
+          "type": "string"
+        },
+        "contribution_economics": {
+          "default": "0.25",
+          "ge": 0,
+          "le": 1,
+          "title": "Contribution Economics",
+          "type": "string"
+        },
+        "demand_evidence": {
+          "default": "0.15",
+          "ge": 0,
+          "le": 1,
+          "title": "Demand Evidence",
+          "type": "string"
+        },
+        "supplier_reliability": {
+          "default": "0.15",
+          "ge": 0,
+          "le": 1,
+          "title": "Supplier Reliability",
+          "type": "string"
+        },
+        "operational_suitability": {
+          "default": "0.10",
+          "ge": 0,
+          "le": 1,
+          "title": "Operational Suitability",
+          "type": "string"
+        },
+        "differentiation": {
+          "default": "0.05",
+          "ge": 0,
+          "le": 1,
+          "title": "Differentiation",
+          "type": "string"
+        }
+      },
+      "title": "Weights",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "weights": {
+      "$ref": "#/$defs/Weights"
+    },
+    "minimum_coverage": {
+      "default": "0.75",
+      "ge": 0,
+      "le": 1,
+      "title": "Minimum Coverage",
+      "type": "string"
+    },
+    "test_threshold": {
+      "default": "70",
+      "ge": 0,
+      "le": 100,
+      "title": "Test Threshold",
+      "type": "string"
+    },
+    "scoring_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Scoring Version",
+      "type": "string"
+    }
+  },
+  "title": "ScoringConfig",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/scoring.schema.json"
+}

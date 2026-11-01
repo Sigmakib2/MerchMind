@@ -1,0 +1,15 @@
+include LICENSE README.md AGENTS.md CONTRIBUTING.md SECURITY.md uv.lock .env.example
+recursive-include docs *.md
+recursive-include adapters *.md
+recursive-include config *.yaml
+recursive-include examples *.json *.csv
+recursive-include schemas *.json
+recursive-include scripts *.py
+recursive-include tests *.py
+recursive-include .agents *.md
+recursive-include .github *.yml
+global-exclude __pycache__ *.py[cod]
+prune .venv
+prune .tmp
+prune workspaces
+prune outputs

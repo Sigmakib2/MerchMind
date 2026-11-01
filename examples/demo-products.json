@@ -1,0 +1,16 @@
+[
+  {
+    "product_id": "lamp-a",
+    "name": "Demo desk lamp",
+    "category": "ambient-lighting",
+    "variant": "warm-usb",
+    "mass_g": "180"
+  },
+  {
+    "product_id": "lamp-b",
+    "name": "Demo rechargeable lamp",
+    "category": "ambient-lighting",
+    "variant": "rgb-battery",
+    "mass_g": "300"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "weights": {
+    "customer_fit": "0.30",
+    "contribution_economics": "0.25",
+    "demand_evidence": "0.15",
+    "supplier_reliability": "0.15",
+    "operational_suitability": "0.10",
+    "differentiation": "0.05"
+  },
+  "minimum_coverage": "0.75",
+  "test_threshold": "70",
+  "scoring_version": "1.0"
+}

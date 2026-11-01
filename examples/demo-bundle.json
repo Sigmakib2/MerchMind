@@ -1,0 +1,188 @@
+{
+  "sources": [
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-6c1b07c4bcd66fd4359c3728",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:fx",
+      "retrieved_at": "2026-11-01T06:09:27.970301Z",
+      "assertion": "Synthetic FX assumption: 1 CNY = 17 BDT, for demonstration only.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "56a938576614b795bf70b266b0702dd3f8e26864861c31facf6db0d8eba9f6b2",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-0f1515797dd632bdb1fdb856",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:cost",
+      "retrieved_at": "2026-11-01T06:09:27.971151Z",
+      "assertion": "Synthetic supplier, freight, fulfillment and advertising assumptions; no live quote.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "0ed3562b154c407564190eae56e3bfede40f7cef9507bd5c69cb85f0b21bf2ee",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-ec75b8779c98009b14e50229",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:tax",
+      "retrieved_at": "2026-11-01T06:09:27.971224Z",
+      "assertion": "Synthetic merchant-confirmed per-unit taxes for arithmetic demonstration; not official rates.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "7b19ba25c4841eb0ab7b4fe4e91a5b7d19e4727f1583cc6523464eb58fa4a127",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-df7b4f879bf3b1461943412d",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:fit",
+      "retrieved_at": "2026-11-01T06:09:27.971281Z",
+      "assertion": "Synthetic merchant assessment informed by demo lamp sales; not a real customer finding.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "b38e292115bb68e3859fa9f387589e05b6440ec36a43db6d9a7f4b43a1b98487",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-4618d7e75a9c99ad25c416b4",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:market",
+      "retrieved_at": "2026-11-01T06:09:27.971319Z",
+      "assertion": "Synthetic local advertised comparable, not observed transactions or demand.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "e81c9ca3dc4154629c1cb8daa2cd5cbefa9d5788b0b53c5d3a882d238cc6405b",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-15e9ac59739f66f9f1667de9",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:supplier",
+      "retrieved_at": "2026-11-01T06:09:27.971355Z",
+      "assertion": "Synthetic supplier terms with a fictional completed merchant checklist.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "880eed82827e2e803168995f66c5b43c0aa243e23d0d5e3529e68d568c06a1bc",
+      "supporting_evidence_ids": []
+    }
+  ],
+  "quotes": [
+    {
+      "supplier_id": "synthetic-supplier",
+      "source": "Synthetic fixture",
+      "listing_url": "https://example.com/product/demo",
+      "product_variant_key": "lamp-a:warm-usb",
+      "price_tiers": [
+        {
+          "min_qty": 10,
+          "unit_price": "12",
+          "currency": "CNY"
+        },
+        {
+          "min_qty": 100,
+          "unit_price": "10",
+          "currency": "CNY"
+        }
+      ],
+      "moq": 10,
+      "mass_g": "180",
+      "packaging_mass_g": "20",
+      "incoterm": "EXW",
+      "lead_time_days": 7,
+      "quote_type": "confirmed",
+      "quoted_at": "2026-11-01T06:09:27.970103+00:00",
+      "valid_until": "2026-11-15T06:09:27.970103+00:00",
+      "evidence_ids": [
+        "ev-15e9ac59739f66f9f1667de9"
+      ],
+      "verification_flags": [],
+      "verification_checks": {
+        "supplier_identity": true,
+        "product_authenticity": true,
+        "trade_terms": true,
+        "sample_policy": true
+      }
+    }
+  ],
+  "comparables": [
+    {
+      "retailer": "Synthetic local shop",
+      "product_match_type": "exact",
+      "product_variant_key": "lamp-a:warm-usb",
+      "price": "1200",
+      "currency": "BDT",
+      "market": "BD",
+      "captured_at": "2026-11-01T06:09:27.970103+00:00",
+      "source_url": "https://example.com/local/demo",
+      "evidence_id": "ev-4618d7e75a9c99ad25c416b4"
+    }
+  ],
+  "signals": {
+    "customer_fit": {
+      "score": "80",
+      "evidence_ids": [
+        "ev-df7b4f879bf3b1461943412d"
+      ],
+      "rationale": "Synthetic merchant-reviewed fit for an existing category."
+    },
+    "demand_evidence": {
+      "score": "60",
+      "evidence_ids": [
+        "ev-df7b4f879bf3b1461943412d"
+      ],
+      "rationale": "Synthetic historical category outcome; no sales forecast."
+    },
+    "supplier_reliability": {
+      "score": "75",
+      "evidence_ids": [
+        "ev-15e9ac59739f66f9f1667de9"
+      ],
+      "rationale": "Synthetic completed supplier checklist."
+    },
+    "operational_suitability": {
+      "score": "90",
+      "evidence_ids": [
+        "ev-0f1515797dd632bdb1fdb856"
+      ],
+      "rationale": "Synthetic mass within merchant constraint."
+    },
+    "differentiation": {
+      "score": "55",
+      "evidence_ids": [
+        "ev-4618d7e75a9c99ad25c416b4"
+      ],
+      "rationale": "Synthetic merchant assessment; modest differentiation."
+    }
+  }
+}

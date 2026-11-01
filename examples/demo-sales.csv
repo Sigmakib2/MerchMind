@@ -1,0 +1,5 @@
+order_id_hash,product_id,date,quantity,unit_price,currency,order_status,fulfilled_count,returned_count
+bddb7c9b58ecdc63df227f4063869dc70c7239cfb31a0a339392814d9627bc14,lamp-a,2026-10-23,10,1200,BDT,fulfilled,10,0
+fc258a9b5646ec2d8c1085290e1df8ab82dc30ece61fe96ccb23c2a19bcd727e,lamp-a,2026-10-24,10,1200,BDT,fulfilled,10,1
+951c34915791ee9ed4397227e06c943cd9259cab929e6ced17dde636d414e73d,lamp-a,2026-10-25,10,1200,BDT,fulfilled,10,0
+9d893df212d8ef72fe5e2f9896096e1965eddd06cc28676b535b9d65736faded,lamp-b,2026-10-26,10,1200,BDT,fulfilled,10,0

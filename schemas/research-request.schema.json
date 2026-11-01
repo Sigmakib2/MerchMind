@@ -1,0 +1,132 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "request_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Request Id",
+      "type": "string"
+    },
+    "merchant_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Merchant Id",
+      "type": "string"
+    },
+    "mode": {
+      "const": "targeted",
+      "default": "targeted",
+      "title": "Mode",
+      "type": "string"
+    },
+    "product_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Product Url"
+    },
+    "product_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Product Name"
+    },
+    "product_variant_key": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Product Variant Key"
+    },
+    "category": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Category"
+    },
+    "safety_review": {
+      "default": "pending",
+      "enum": [
+        "pending",
+        "approved",
+        "blocked"
+      ],
+      "title": "Safety Review",
+      "type": "string"
+    },
+    "safety_evidence_ids": {
+      "items": {
+        "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+        "type": "string"
+      },
+      "title": "Safety Evidence Ids",
+      "type": "array"
+    },
+    "market_country": {
+      "title": "Market Country",
+      "type": "string"
+    },
+    "max_sources": {
+      "default": 20,
+      "maximum": 100,
+      "minimum": 1,
+      "title": "Max Sources",
+      "type": "integer"
+    },
+    "max_duration_minutes": {
+      "default": 30,
+      "maximum": 60,
+      "minimum": 1,
+      "title": "Max Duration Minutes",
+      "type": "integer"
+    },
+    "max_estimated_api_cost_usd": {
+      "default": "1",
+      "ge": 0,
+      "title": "Max Estimated Api Cost Usd",
+      "type": "string"
+    },
+    "require_human_approval_for_external_actions": {
+      "const": true,
+      "default": true,
+      "title": "Require Human Approval For External Actions",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "request_id",
+    "merchant_id",
+    "market_country"
+  ],
+  "title": "ResearchRequest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/research-request.schema.json"
+}

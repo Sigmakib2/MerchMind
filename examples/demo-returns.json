@@ -1,0 +1,10 @@
+[
+  {
+    "return_id": "return-demo-1",
+    "product_id": "lamp-a",
+    "quantity": 1,
+    "reason_code": "damaged",
+    "date": "2026-11-01",
+    "associated_cost": "100"
+  }
+]

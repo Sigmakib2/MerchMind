@@ -1,0 +1,6 @@
+schema_version: "1.0"
+max_requests_per_domain: 3
+max_response_bytes: 1000000
+max_sources: 20
+max_duration_minutes: 30
+max_report_bytes: 10000000

@@ -1,0 +1,503 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run-393760d238e243a6",
+  "merchant_id": "cozy-vibe-demo",
+  "request_id": "req-demo-001",
+  "run_at": "2026-11-01T06:09:27.987914Z",
+  "engine_version": "0.1.0",
+  "product_identity": {
+    "name": "Synthetic warm USB desk lamp",
+    "variant": "lamp-a:warm-usb",
+    "match_status": "specified_by_merchant"
+  },
+  "customer_fit": {
+    "score": "80",
+    "evidence_ids": [
+      "ev-df7b4f879bf3b1461943412d"
+    ],
+    "rationale": "Synthetic merchant-reviewed fit for an existing category."
+  },
+  "supplier_options": [
+    {
+      "schema_version": "1.0",
+      "supplier_id": "synthetic-supplier",
+      "source": "Synthetic fixture",
+      "listing_url": "https://example.com/product/demo",
+      "product_variant_key": "lamp-a:warm-usb",
+      "price_tiers": [
+        {
+          "min_qty": 10,
+          "unit_price": "12",
+          "currency": "CNY"
+        },
+        {
+          "min_qty": 100,
+          "unit_price": "10",
+          "currency": "CNY"
+        }
+      ],
+      "moq": 10,
+      "mass_g": "180",
+      "packaging_mass_g": "20",
+      "incoterm": "EXW",
+      "lead_time_days": 7,
+      "quote_type": "confirmed",
+      "quoted_at": "2026-11-01T06:09:27.970103Z",
+      "valid_until": "2026-11-15T06:09:27.970103Z",
+      "evidence_ids": [
+        "ev-15e9ac59739f66f9f1667de9"
+      ],
+      "verification_flags": [],
+      "verification_checks": {
+        "supplier_identity": true,
+        "product_authenticity": true,
+        "trade_terms": true,
+        "sample_policy": true
+      }
+    }
+  ],
+  "local_comparables": [
+    {
+      "retailer": "Synthetic local shop",
+      "product_match_type": "exact",
+      "product_variant_key": "lamp-a:warm-usb",
+      "price": "1200",
+      "currency": "BDT",
+      "market": "BD",
+      "captured_at": "2026-11-01T06:09:27.970103Z",
+      "source_url": "https://example.com/local/demo",
+      "evidence_id": "ev-4618d7e75a9c99ad25c416b4",
+      "price_type": "advertised"
+    }
+  ],
+  "economics": {
+    "status": "complete",
+    "scenarios": [
+      {
+        "name": "optimistic",
+        "status": "complete",
+        "missing": [],
+        "currency": "BDT",
+        "breakdown": {
+          "purchase_local": "170",
+          "billable_mass_g": "200",
+          "freight_local": "200.00",
+          "import_duties": "40",
+          "nonrecoverable_vat": "20",
+          "brokerage": "10",
+          "local_inbound": "15",
+          "other_import_costs": "5",
+          "selling_price_net": "1250",
+          "packaging": "20",
+          "fulfillment": "60",
+          "payment_fee": "15",
+          "marketing_cost": "80",
+          "expected_return_loss": "30"
+        },
+        "landed": "460.00",
+        "contribution": "585.00",
+        "contribution_margin": "0.468"
+      },
+      {
+        "name": "base",
+        "status": "complete",
+        "missing": [],
+        "currency": "BDT",
+        "breakdown": {
+          "purchase_local": "187",
+          "billable_mass_g": "200",
+          "freight_local": "200.00",
+          "import_duties": "40",
+          "nonrecoverable_vat": "20",
+          "brokerage": "10",
+          "local_inbound": "15",
+          "other_import_costs": "5",
+          "selling_price_net": "1200",
+          "packaging": "20",
+          "fulfillment": "60",
+          "payment_fee": "15",
+          "marketing_cost": "100",
+          "expected_return_loss": "30"
+        },
+        "landed": "477.00",
+        "contribution": "498.00",
+        "contribution_margin": "0.415"
+      },
+      {
+        "name": "conservative",
+        "status": "complete",
+        "missing": [],
+        "currency": "BDT",
+        "breakdown": {
+          "purchase_local": "204",
+          "billable_mass_g": "200",
+          "freight_local": "200.00",
+          "import_duties": "40",
+          "nonrecoverable_vat": "20",
+          "brokerage": "10",
+          "local_inbound": "15",
+          "other_import_costs": "5",
+          "selling_price_net": "1100",
+          "packaging": "20",
+          "fulfillment": "60",
+          "payment_fee": "15",
+          "marketing_cost": "150",
+          "expected_return_loss": "30"
+        },
+        "landed": "494.00",
+        "contribution": "331.00",
+        "contribution_margin": "0.30090909090909090909090909090909090909"
+      }
+    ],
+    "assumptions": [
+      "All costs are per sellable unit; batch charges must be allocated before input.",
+      "Selling prices exclude collected sales tax; import tax amounts are merchant-confirmed inputs.",
+      "Freight excludes customs. FX and cost assumptions are preserved in the input snapshot.",
+      "Recoverable import VAT is excluded from expense, but still requires working capital."
+    ],
+    "evidence_ids": [
+      "ev-0f1515797dd632bdb1fdb856",
+      "ev-6c1b07c4bcd66fd4359c3728",
+      "ev-ec75b8779c98009b14e50229"
+    ],
+    "input_snapshot": {
+      "schema_version": "1.0",
+      "merchant_id": "cozy-vibe-demo",
+      "product_variant_key": "lamp-a:warm-usb",
+      "origin_country": "CN",
+      "destination_country": "BD",
+      "fx": {
+        "source_currency": "CNY",
+        "target_currency": "BDT",
+        "rate": "17",
+        "as_of": "2026-11-01T06:09:27.970103Z",
+        "evidence_id": "ev-6c1b07c4bcd66fd4359c3728"
+      },
+      "evidence_ids": [
+        "ev-0f1515797dd632bdb1fdb856"
+      ],
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "unit_price_source": "10",
+          "mass_g": "180",
+          "packaging_mass_g": "20",
+          "mass": null,
+          "packaging_mass": null,
+          "volumetric_mass_g": null,
+          "fixed_sourcing_per_unit": "0",
+          "import_duties": "40",
+          "import_vat": "20",
+          "tax_inputs_confirmed": true,
+          "tax_evidence_ids": [
+            "ev-ec75b8779c98009b14e50229"
+          ],
+          "brokerage": "10",
+          "local_inbound": "15",
+          "other_import_costs": "5",
+          "selling_price_net": "1250",
+          "packaging": "20",
+          "fulfillment": "60",
+          "payment_fee": "15",
+          "marketing_cost": "80",
+          "expected_return_loss": "30"
+        },
+        {
+          "name": "base",
+          "unit_price_source": "11",
+          "mass_g": "180",
+          "packaging_mass_g": "20",
+          "mass": null,
+          "packaging_mass": null,
+          "volumetric_mass_g": null,
+          "fixed_sourcing_per_unit": "0",
+          "import_duties": "40",
+          "import_vat": "20",
+          "tax_inputs_confirmed": true,
+          "tax_evidence_ids": [
+            "ev-ec75b8779c98009b14e50229"
+          ],
+          "brokerage": "10",
+          "local_inbound": "15",
+          "other_import_costs": "5",
+          "selling_price_net": "1200",
+          "packaging": "20",
+          "fulfillment": "60",
+          "payment_fee": "15",
+          "marketing_cost": "100",
+          "expected_return_loss": "30"
+        },
+        {
+          "name": "conservative",
+          "unit_price_source": "12",
+          "mass_g": "180",
+          "packaging_mass_g": "20",
+          "mass": null,
+          "packaging_mass": null,
+          "volumetric_mass_g": null,
+          "fixed_sourcing_per_unit": "0",
+          "import_duties": "40",
+          "import_vat": "20",
+          "tax_inputs_confirmed": true,
+          "tax_evidence_ids": [
+            "ev-ec75b8779c98009b14e50229"
+          ],
+          "brokerage": "10",
+          "local_inbound": "15",
+          "other_import_costs": "5",
+          "selling_price_net": "1100",
+          "packaging": "20",
+          "fulfillment": "60",
+          "payment_fee": "15",
+          "marketing_cost": "150",
+          "expected_return_loss": "30"
+        }
+      ]
+    }
+  },
+  "evaluation": {
+    "score": "81",
+    "coverage": "1.00",
+    "decision": "test",
+    "scoring_version": "1.0",
+    "components": {
+      "customer_fit": {
+        "score": "80",
+        "evidence_ids": [
+          "ev-df7b4f879bf3b1461943412d"
+        ],
+        "rationale": "Synthetic merchant-reviewed fit for an existing category."
+      },
+      "contribution_economics": {
+        "score": "100",
+        "evidence_ids": [
+          "ev-0f1515797dd632bdb1fdb856",
+          "ev-6c1b07c4bcd66fd4359c3728",
+          "ev-ec75b8779c98009b14e50229"
+        ],
+        "rationale": "Conservative contribution margin divided by merchant target, capped at 100."
+      },
+      "demand_evidence": {
+        "score": "60",
+        "evidence_ids": [
+          "ev-df7b4f879bf3b1461943412d"
+        ],
+        "rationale": "Synthetic historical category outcome; no sales forecast."
+      },
+      "supplier_reliability": {
+        "score": "75",
+        "evidence_ids": [
+          "ev-15e9ac59739f66f9f1667de9"
+        ],
+        "rationale": "Synthetic completed supplier checklist."
+      },
+      "operational_suitability": {
+        "score": "90",
+        "evidence_ids": [
+          "ev-0f1515797dd632bdb1fdb856"
+        ],
+        "rationale": "Synthetic mass within merchant constraint."
+      },
+      "differentiation": {
+        "score": "55",
+        "evidence_ids": [
+          "ev-4618d7e75a9c99ad25c416b4"
+        ],
+        "rationale": "Synthetic merchant assessment; modest differentiation."
+      }
+    },
+    "blockers": [],
+    "rationale": "Hard constraints take priority; missing signals disclose coverage and are excluded from the weighted denominator. Test means consider a controlled sample, not guaranteed sales.",
+    "policy": {
+      "schema_version": "1.0",
+      "weights": {
+        "customer_fit": "0.30",
+        "contribution_economics": "0.25",
+        "demand_evidence": "0.15",
+        "supplier_reliability": "0.15",
+        "operational_suitability": "0.10",
+        "differentiation": "0.05"
+      },
+      "minimum_coverage": "0.75",
+      "test_threshold": "70",
+      "scoring_version": "1.0"
+    }
+  },
+  "missing_evidence": [],
+  "sources": [
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-6c1b07c4bcd66fd4359c3728",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:fx",
+      "retrieved_at": "2026-11-01T06:09:27.970301Z",
+      "assertion": "Synthetic FX assumption: 1 CNY = 17 BDT, for demonstration only.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "56a938576614b795bf70b266b0702dd3f8e26864861c31facf6db0d8eba9f6b2",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-0f1515797dd632bdb1fdb856",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:cost",
+      "retrieved_at": "2026-11-01T06:09:27.971151Z",
+      "assertion": "Synthetic supplier, freight, fulfillment and advertising assumptions; no live quote.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "0ed3562b154c407564190eae56e3bfede40f7cef9507bd5c69cb85f0b21bf2ee",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-ec75b8779c98009b14e50229",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:tax",
+      "retrieved_at": "2026-11-01T06:09:27.971224Z",
+      "assertion": "Synthetic merchant-confirmed per-unit taxes for arithmetic demonstration; not official rates.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "7b19ba25c4841eb0ab7b4fe4e91a5b7d19e4727f1583cc6523464eb58fa4a127",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-df7b4f879bf3b1461943412d",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:fit",
+      "retrieved_at": "2026-11-01T06:09:27.971281Z",
+      "assertion": "Synthetic merchant assessment informed by demo lamp sales; not a real customer finding.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "b38e292115bb68e3859fa9f387589e05b6440ec36a43db6d9a7f4b43a1b98487",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-4618d7e75a9c99ad25c416b4",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:market",
+      "retrieved_at": "2026-11-01T06:09:27.971319Z",
+      "assertion": "Synthetic local advertised comparable, not observed transactions or demand.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "e81c9ca3dc4154629c1cb8daa2cd5cbefa9d5788b0b53c5d3a882d238cc6405b",
+      "supporting_evidence_ids": []
+    },
+    {
+      "schema_version": "1.0",
+      "evidence_id": "ev-15e9ac59739f66f9f1667de9",
+      "source_type": "merchant_record",
+      "source_uri": null,
+      "source_record_ref": "demo:supplier",
+      "retrieved_at": "2026-11-01T06:09:27.971355Z",
+      "assertion": "Synthetic supplier terms with a fictional completed merchant checklist.",
+      "captured_value": null,
+      "currency": null,
+      "unit": null,
+      "verification_status": "merchant_provided",
+      "freshness_status": "current",
+      "hash": "880eed82827e2e803168995f66c5b43c0aa243e23d0d5e3529e68d568c06a1bc",
+      "supporting_evidence_ids": []
+    }
+  ],
+  "source_statuses": [
+    {
+      "source": "https://example.com/product/demo",
+      "status": "not_fetched",
+      "reason": "Offline run; use imported evidence or explicitly enable online access"
+    }
+  ],
+  "merchant_snapshot": {
+    "schema_version": "1.0",
+    "merchant_id": "cozy-vibe-demo",
+    "name": "Cozy Vibe Demo (synthetic)",
+    "market_country": "BD",
+    "base_currency": "BDT",
+    "source_countries": [
+      "CN"
+    ],
+    "allowed_marketplaces": [
+      "example.com"
+    ],
+    "preferred_categories": [
+      "ambient-lighting",
+      "desk-decor"
+    ],
+    "excluded_categories": [
+      "regulated-products"
+    ],
+    "constraints": {
+      "max_product_mass_g": "400",
+      "minimum_contribution_margin": "0.30",
+      "require_positive_conservative_margin": true
+    },
+    "freight": {
+      "mode": "per_gram",
+      "rate": "1.00",
+      "currency": "BDT",
+      "rate_basis": "billable_mass",
+      "minimum_charge": "0",
+      "customs_included": false
+    },
+    "finance": {
+      "fx_policy": "dated_source_required",
+      "import_tax_policy": "manual_verified_input",
+      "merchant_vat_treatment": "expense",
+      "max_fx_age_days": 30
+    },
+    "permissions": {
+      "read_only_research": true,
+      "outbound_messages": false,
+      "purchasing": false
+    }
+  },
+  "request_snapshot": {
+    "schema_version": "1.0",
+    "request_id": "req-demo-001",
+    "merchant_id": "cozy-vibe-demo",
+    "mode": "targeted",
+    "product_url": "https://example.com/product/demo",
+    "product_name": "Synthetic warm USB desk lamp",
+    "product_variant_key": "lamp-a:warm-usb",
+    "category": "ambient-lighting",
+    "safety_review": "approved",
+    "safety_evidence_ids": [
+      "ev-15e9ac59739f66f9f1667de9"
+    ],
+    "market_country": "BD",
+    "max_sources": 20,
+    "max_duration_minutes": 30,
+    "max_estimated_api_cost_usd": "1",
+    "require_human_approval_for_external_actions": true
+  },
+  "research_policy": {
+    "schema_version": "1.0",
+    "max_requests_per_domain": 3,
+    "max_response_bytes": 1000000,
+    "max_sources": 20,
+    "max_duration_minutes": 30,
+    "max_report_bytes": 10000000
+  }
+}

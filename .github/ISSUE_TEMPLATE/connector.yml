@@ -1,0 +1,15 @@
+name: Connector proposal
+description: Propose an authorized data source and normalized connector contract
+body:
+  - type: textarea
+    attributes:
+      label: Source and access authorization
+      description: Describe documented API/automation permissions, access limits and failure modes.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Contract and redistributable fixtures
+      description: Explain input/output fields, pricing provenance, credentials and test coverage.
+    validations:
+      required: true

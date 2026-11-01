@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "request_id": "req-demo-001",
+  "merchant_id": "cozy-vibe-demo",
+  "mode": "targeted",
+  "product_url": "https://example.com/product/demo",
+  "product_name": "Synthetic warm USB desk lamp",
+  "product_variant_key": "lamp-a:warm-usb",
+  "category": "ambient-lighting",
+  "safety_review": "approved",
+  "safety_evidence_ids": [
+    "ev-15e9ac59739f66f9f1667de9"
+  ],
+  "market_country": "BD",
+  "max_sources": 20,
+  "max_duration_minutes": 30,
+  "max_estimated_api_cost_usd": "1",
+  "require_human_approval_for_external_actions": true
+}
