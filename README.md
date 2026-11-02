@@ -1,160 +1,181 @@
 # MerchMind
 
-MerchMind helps small online sellers answer two questions:
+MerchMind helps small online sellers turn a niche idea into customer hypotheses, product comparisons and a launch-cost estimate. Merchants with existing sales can also use their history to build customer profiles and evaluate new products.
 
-- Does this product fit my business and customers?
-- How much money could be left after buying, importing and selling it?
+It is built for **physical-product businesses**. You supply the niche, market, sourcing sites and restrictions. Reports show the evidence, assumptions, missing information and calculations behind each result.
 
-It combines your sales history, supplier quotes, local prices and cost assumptions into a report. Each report shows its sources, calculations and missing information, then recommends **test**, **investigate** or **reject**.
+**Status: developer alpha.** The local workflows and offline demos work. Live provider accounts, DeepSeek Harness integration, authorized sources and real-store outcomes still need qualification. See [implementation status](docs/status.md).
 
-**Current stage: developer alpha.** The local command-line toolkit and offline demo work. Real-store evaluation and live DeepSeek Harness integration still need verification. See [what is built and what remains](docs/status.md).
+## Quick start
 
-## Run your first demo
+Install [Git](https://git-scm.com/downloads), [Python 3.12 or later](https://www.python.org/downloads/) and [uv](https://docs.astral.sh/uv/getting-started/installation/).
 
-### 1. Check the requirements
-
-Install:
-
-- [Python](https://www.python.org/downloads/) 3.12 or later.
-- [uv](https://docs.astral.sh/uv/getting-started/installation/), which installs and manages the project's Python dependencies.
-
-Open a terminal in the MerchMind folder. The following commands should print the installed versions:
+For a fresh checkout:
 
 ```sh
-python --version
-uv --version
-```
-
-On Windows, `py --version` can be used to check Python if `python` is unavailable. Internet access is needed to download dependencies during setup.
-
-### 2. Install and run
-
-```sh
+git clone https://github.com/Sigmakib2/MerchMind.git
+cd MerchMind
 uv sync --locked
-uv run merchmind demo --workspace workspaces/demo
+uv run merchmind demo --mode journey --workspace workspaces/first-journey
 ```
 
-The first command creates an isolated Python environment and installs the versions recorded in `uv.lock`. The second runs the complete demo using fictional store data. The demo needs no AI account, API key, paid service or internet connection once setup is complete.
+If you already have the repository, run the last two commands from its root folder.
 
-### 3. Open the report
+Setup downloads the locked dependencies into an isolated Python environment. After setup, this demo needs **no API keys, paid service, AI account or network access**. It uses fictional data and recorded provider responses.
 
-The command prints a result containing `artifact_paths`: the locations of the files it created. Open the file ending in **report.md** for the readable report. Find it under:
+The demo exercises all five stages. It deliberately includes an unknown product attribute, conflicting customer observations and a conservative launch scenario that exceeds the fictional budget.
 
-```text
-workspaces/demo/reports/<run-id>/report.md
+### Open your results
+
+The command prints `artifact_paths`: the exact locations of the generated files. Open the Markdown files for readable reports.
+
+| File | What it explains |
+| --- | --- |
+| `starter-profile.md` | Four possible customer groups, their needs, uncertainties and sources |
+| `comparison.md` | Product attributes that match, conflict with or lack evidence for each hypothesis |
+| `validation-summary.md` | Customer observations supporting or contradicting the hypotheses |
+| `launch-budget.md` | Upfront cash required across optimistic, base and conservative scenarios |
+
+Matching JSON files preserve the structured results and inputs. The workspace's `demo-inputs/` folder contains complete example files for the individual commands.
+
+Use a new workspace name when repeating a demo, such as `workspaces/second-journey`. Existing merchant inputs are never silently overwritten.
+
+## The five-step merchant journey
+
+| Step | What MerchMind does |
+| --- | --- |
+| **1. Guided setup** | Asks about your business, niche, market, budget, sourcing sites and product restrictions. |
+| **2. Customer research** | Prepares research questions; optionally connects approved Brave search results with DeepSeek synthesis to develop three or four customer hypotheses. |
+| **3. Product comparison** | Applies explicit rules to evidenced product attributes and shows matches, mismatches, unknowns and coverage for each group. |
+| **4. Customer validation** | Records aggregate interviews, surveys, sample tests, sales and returns against the original hypotheses. |
+| **5. Launch costs** | Estimates batch cash needs using supplier minimum quantities, applicable price tiers, import costs, samples, setup, ads, contingency and reserves. |
+
+Customer groups remain **hypotheses**. Search results, listing counts or a high attribute-match score do not establish demand, willingness to pay or a psychological model of real people. Validation summaries preserve conflicting observations and do not automatically declare a group proven.
+
+The [merchant journey guide](docs/merchant-journey.md) explains each command, input format and calculation assumption.
+
+## Start your own business workspace
+
+```sh
+uv run merchmind onboard --workspace workspaces/my-store
 ```
 
-The demo also creates a customer profile and supporting files:
+Answer the guided questions. No sales history is required. Optional costs can be left blank and remain unknown.
 
-| File | Purpose |
+For a repeatable or agent-driven setup, prepare an answer file using [the example format](examples/onboarding-answers.json):
+
+```sh
+uv run merchmind onboard --workspace workspaces/my-store --answers my-answers.json
+```
+
+Choose one setup method and a new workspace. Replace sample business details and approved hostnames before using real data. The resulting workspace includes your merchant settings, niche brief, source/scoring policies, budget input and readiness checks.
+
+### Explore a niche without sales
+
+```sh
+uv run merchmind profile starter prepare --workspace workspaces/my-store --brief workspaces/my-store/niche-brief.json
+uv run merchmind profile starter build --workspace workspaces/my-store --brief workspaces/my-store/niche-brief.json
+```
+
+`prepare` creates research questions and queries. `build` without researched inputs creates generic, low-confidence draft groups to investigate. It does not search the web or claim to know what customers want.
+
+You can import a source-backed synthesis from a merchant or external agent using `build --research FILE`. See the [starter-mode guide](docs/starter-mode.md).
+
+### Connect online research when ready
+
+The optional connection uses **Brave Web Search** and **DeepSeek JSON synthesis**. It requires your provider accounts, current configured prices, approved research hosts and explicit sharing consent.
+
+Copy [the connection template](config/research-connection.example.yaml) into your private workspace, set its model, hosts and prices, and export the configured key environment variables. Then run:
+
+```sh
+uv run merchmind profile starter research --workspace workspaces/my-store --brief workspaces/my-store/niche-brief.json --connection workspaces/my-store/research-connection.yaml --online --share-brief
+```
+
+This sends the niche brief, queries and public snippets to the providers. Customer files and merchant financial settings are not inserted into prompts. Keys are not saved in reports. Unknown provider prices block execution; estimated limits are separate from provider account billing caps.
+
+Collected snippets remain unverified, and synthesized groups remain low-confidence hypotheses. Failed or malformed responses produce partial results with available sources and warnings.
+
+See the [connection instructions](docs/merchant-journey.md#2-connected-research) for environment variables, limits and current verification status. Live provider accounts have not yet been qualified; automated tests use mocked responses.
+
+## Already have sales history?
+
+Import your catalog first, followed by sales and optional returns, then build an observed profile:
+
+```sh
+uv run merchmind import products --workspace workspaces/my-store --file my-products.csv
+uv run merchmind import sales --workspace workspaces/my-store --file my-sales.csv
+uv run merchmind import returns --workspace workspaces/my-store --file my-returns.csv
+uv run merchmind profile build --workspace workspaces/my-store
+```
+
+The `my-*.csv` files are files you supply. See [sample files](examples/) and the [data dictionary](docs/data-dictionary.md) for required fields. Sales values must use the workspace currency; customer contact columns are rejected. Profiles distinguish gross sales observations from unavailable net-revenue or repeat-purchase metrics.
+
+Review the [onboarding guide](docs/onboarding.md) before importing real records. Merchant IDs in research and cost files must match your workspace.
+
+## Evaluate a specific product
+
+The targeted-research workflow accepts a product name or URL, reviewed supplier/local-price evidence and three cost scenarios. Its JSON and Markdown reports recommend:
+
+| Decision | Meaning |
 | --- | --- |
-| `customer-profile.md` | Summarizes outcomes in the sample sales history |
-| `report.md` | Explains the product decision and cost scenarios |
-| `report.json` | Keeps the structured results and calculation inputs |
-| `sources.jsonl` | Records the evidence behind the report |
-| `run-log.jsonl` | Records the saved run |
-
-The sample decision is **test**, with a score of **81/100**. Its conservative scenario has a landed cost of **494 BDT** and **331 BDT** left after the included product and selling costs. This is contribution, before expenses outside the calculation, such as fixed business overhead. All demo prices, exchange rates, taxes and supplier details are fictional.
-
-To run the demo again, choose another folder, such as `workspaces/demo-2`. MerchMind refuses to replace an existing workspace.
-
-## Understand the decision
-
-| Decision | What it means |
-| --- | --- |
-| **Test** | The supplied evidence and economics pass the configured checks. Consider a small, controlled sample. |
-| **Investigate** | Important information is missing, uncertain or below your requirements. Read the report's missing-evidence list. |
+| **Test** | Supplied evidence and economics pass the configured checks. Consider a controlled sample. |
+| **Investigate** | Important information is missing, uncertain or below your requirements. |
 | **Reject** | A hard rule failed, such as an excluded category, blocked safety review or unacceptable conservative margin. |
 
-A high score does not guarantee sales. Missing costs stay unknown; they are never silently counted as zero.
+Money uses decimal arithmetic. Unknown costs stay unknown. Tax inputs require confirmation and evidence. Per-unit contribution, launch cash, recoverable VAT and held reserves are kept distinct.
 
-## Starting without existing customers?
+The core economics and scoring work without an AI model. Six [project skills](.agents/skills/) support external agent orchestration; live DeepSeek Harness skill loading still needs verification.
 
-For guided setup, optional connected research, product comparison, customer feedback and launch costs, see the [merchant journey guide](docs/merchant-journey.md). Try all five stages offline:
+## Other demos
 
-```sh
-uv run merchmind demo --mode journey --workspace workspaces/my-journey-demo
-```
-
-For your own business, run `uv run merchmind onboard --workspace workspaces/my-store` and answer the questions. No sales history is required.
-
-Use **starter mode** to explore a niche before you have sales history:
+These commands also run offline after dependency setup. Use a new workspace for each:
 
 ```sh
-uv run merchmind demo --mode starter --workspace workspaces/fitness-starter
+uv run merchmind demo --mode starter --workspace workspaces/starter-only
+uv run merchmind demo --mode sales --workspace workspaces/sales-only
 ```
 
-It creates three or four possible customer profiles, questions to research, and product-search directions for approved sourcing sites. The demo uses lightweight home fitness as an example. These are unvalidated hypotheses: the offline demo does not search the web or claim to know what real buyers want.
+Starter-only mode produces unresearched draft groups. Sales-only mode uses a fictional catalog, orders and returns to produce a product decision report. All demo research, prices, taxes and supplier details are synthetic.
 
-You can describe your own niche and add a source-backed synthesis from a merchant or external research agent. Read the [starter-mode guide](docs/starter-mode.md) for the full workflow and current limits.
+## Current limits
 
-## Use your own business data
+- Automatic supplier shortlists, verified marketplace-price extraction and dedicated Alibaba/1688 connectors are not implemented.
+- Product comparisons require explicit criteria and reviewed attribute evidence. They do not simulate customers voting on a product.
+- Customer observations are entered/imported by the merchant; collecting interviews and reconciling profiles with later sales are not automatic.
+- Launch estimates depend on supplied costs and documented assumptions, including all ordered units being sellable.
+- The toolkit does not order products, send supplier messages, make payments, modify accounts or bypass login/CAPTCHA restrictions.
+- Services and digital products need different sourcing and economics workflows.
+- Live-provider checks, hosted CI results, DSH qualification and the real-store pilot are separate from local test success.
 
-Start with a separate workspace:
+Read the [source policy](docs/connector-policy.md) and [implementation status](docs/status.md) for details.
 
-```sh
-uv run merchmind init --workspace workspaces/my-store
-```
+## Privacy and evidence
 
-Then follow these steps:
+Workspaces, generated reports, local environments and secret files are ignored by Git. Default workflows keep data local. Connected research shares the niche brief and public snippets only after explicit consent. Validation records and merchant financial files are not inserted into provider prompts.
 
-1. **Set up your business.** Edit `merchant.yaml` inside that workspace. Set your market, currency, shipping assumptions, product restrictions and target margin. The initial values are demo defaults.
-2. **Import your history.** Use the files in `examples/` as format guides for your catalog, sales and returns. Import the catalog first, then sales and optional returns.
-3. **Build the customer profile.** Review the sales observations before using them to assess a new product.
-4. **Prepare your product research.** Supply its name or URL, exact variation when known, reviewed evidence, supplier quotes and local price comparisons.
-5. **Estimate costs and read the report.** Supply optimistic, base and conservative scenarios, including dated exchange rates and confirmed tax inputs. Check the missing-evidence list before acting.
+Keep personal information and credentials out of notes and imported records. Unsupported contact fields are rejected, but free-text notes still require review. The ignored `.env` file is not automatically loaded by the application.
 
-The [onboarding guide](docs/onboarding.md) explains the fields and evidence review. The [data dictionary](docs/data-dictionary.md) explains file formats, units and supplier imports. Your request and cost files must use the same merchant ID as your workspace.
+Evidence and earlier reports are preserved. Customer-study corrections create new records rather than overwriting old ones, and ledger locks prevent simultaneous commands from bypassing duplicate checks. Content hashes detect accidental edits; they are not a signed, tamper-proof archive.
 
-To try an incomplete research request with the demo workspace:
-
-```sh
-uv run merchmind research run --workspace workspaces/demo --request examples/partial-request.json
-```
-
-This returns **investigate** and lists the information still needed. It does not invent the missing research.
-
-Run `uv run merchmind --help` to see the available commands. Add `--help` after a command, for example `uv run merchmind research run --help`, for its options.
-
-## What this version can do
-
-- Import CSV or JSON catalogs, sales, returns and supplier quotes.
-- Build customer profiles from aggregate sales observations.
-- Explore a new niche without sales history through distinct starter hypotheses and guided sourcing plans.
-- Set up a business through guided questions and optionally connect Brave search with DeepSeek synthesis.
-- Compare evidenced product attributes with customer hypotheses and track real validation observations.
-- Estimate total launch cash using minimum quantities, applicable price tiers and upfront costs.
-- Calculate shipping, landed cost and contribution across three scenarios.
-- Score opportunities with visible evidence coverage and decision rules.
-- Save reports, preserve their inputs and check that calculations can be reproduced.
-- Provide six research skills for an external agent runtime, including DeepSeek Harness (DSH).
-
-Research runs offline by default. An explicit `--online` option enables limited, read-only retrieval from approved websites. The generic page adapter records an unverified title and receipt hash. Optional connected research uses approved search results and model synthesis with configured accounts, budgets and `--share-brief` consent. Reviewed imports supply prices and supplier facts; automatic verified marketplace-price extraction is not implemented. See the [source policy](docs/connector-policy.md) and [merchant journey guide](docs/merchant-journey.md).
-
-MerchMind does not place orders, send supplier messages, make payments or bypass login and CAPTCHA restrictions. Alibaba and 1688 do not yet have dedicated connectors. Live DSH skill loading and a real-store pilot remain release checks; local skill checks do not establish runtime compatibility.
-
-## Keep business data private
-
-Workspaces, generated reports and environment files are ignored by Git. Default workflows keep data local. Optional connected research sends the niche brief and public snippets only after explicit sharing consent; merchant financial files and validation records are not inserted into provider prompts. Imports reject unsupported fields such as customer email or phone columns. Remove personal information and credentials from your own notes and source records before importing them.
-
-See the [security policy](SECURITY.md) for reporting vulnerabilities and the [threat model](docs/threat-model.md) for current controls and limits.
+See [security reporting](SECURITY.md) and the [threat model](docs/threat-model.md).
 
 ## Common problems
 
 | Problem | What to do |
 | --- | --- |
 | `uv` is not found | Install uv, reopen the terminal and check `uv --version`. |
-| The workspace already exists | Use a new folder name. Existing inputs are preserved. |
-| The decision is `investigate` | Read the missing-evidence list in `report.md`. An incomplete report can be a valid result. |
-| A cost is `not_estimated` | Supply the missing inputs, current exchange rate or confirmed tax evidence. |
-| A financial value fails validation | Use quoted decimal strings, such as `"17.50"`, with the required currency and units. |
-| A website cannot be accessed | Use an authorized CSV/JSON export or a manually reviewed quote. |
+| A workspace already exists | Choose a new folder. Existing inputs are preserved. |
+| A result is `investigate`, `unknown` or `not_estimated` | Read the report's missing-evidence or missing-input list. |
+| Connected research cannot start | Check keys, configured prices, approved hosts and both consent flags. |
+| A provider returns a partial result | Review its sources and warnings; correct the connection or use a manual research import. |
+| A financial value fails validation | Use quoted decimal strings, such as `"17.50"`, with explicit currency and units. |
+| The validation ledger is busy | Retry after the other operation finishes; see the guide before removing a stale lock. |
 
-## Development and project conventions
+Run `uv run merchmind --help` to see all commands. Add `--help` after a command for its arguments, for example `uv run merchmind launch estimate --help`.
 
-The project uses a `src/` package layout, `pyproject.toml` for package configuration, a `uv.lock` dependency lockfile, Pydantic input validation, JSON Schema contracts, pytest tests and Ruff formatting/linting. Financial calculations use Python's decimal arithmetic and run independently of any AI model.
+## Development
 
-Install the development tools and run the checks:
+The project uses a `src/` package layout, `pyproject.toml`, locked dependencies, Pydantic contracts, JSON Schema, pytest and Ruff. Install development tools and run:
 
 ```sh
 uv sync --locked --extra dev
@@ -164,6 +185,6 @@ uv run ruff format --check .
 uv run python scripts/check_skills.py
 ```
 
-When changing data models, regenerate the schemas with `uv run python scripts/export_schemas.py`. GitHub Actions is configured to run the checks on Linux and Windows with Python 3.12 and 3.14; local checks alone do not establish that hosted CI has passed.
+After changing models, regenerate schemas with `uv run python scripts/export_schemas.py`. CI is configured for Linux and Windows with Python 3.12 and 3.14, plus package-install demos. Local skill metadata checks do not establish live agent-runtime compatibility.
 
-Read the [contribution guide](CONTRIBUTING.md), [architecture](docs/architecture.md), [DSH adapter instructions](adapters/dsh/README.md) and [implementation status](docs/status.md) for more detail. The project uses the [Apache 2.0 license](LICENSE).
+See [contributing](CONTRIBUTING.md), [architecture](docs/architecture.md), [the DSH adapter](adapters/dsh/README.md) and [evaluation](docs/evaluation.md). MerchMind uses the [Apache 2.0 license](LICENSE).
