@@ -8,6 +8,6 @@
 | Other agent runtimes | CLI and portable skills | No runtime-specific qualification claimed |
 | Alibaba/1688 | Manual quote/CSV fallback | No marketplace-specific live connector |
 | Generic HTTPS | Approved exact host, TLS, robots | Mocked contract/security tests; real authorized source audit pending |
-| Connected research | Brave Search and DeepSeek JSON API | Mocked transport/contracts and recorded offline journey pass; live credentials/account smoke pending |
+| Agent handoff | Runtime-owned browsing and synthesis, no separate search/model API | Local submission/demo checks available; actual browsing/tool qualification pending for each runtime |
 
 Do not label DSH compatible for a release until discovery, skill loading, local command invocation and report writing are all recorded against an exact runtime build. Follow `adapters/dsh/README.md`.

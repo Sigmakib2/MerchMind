@@ -23,7 +23,8 @@
             "independent_review",
             "government",
             "inference",
-            "web_search_result"
+            "web_search_result",
+            "agent_web_capture"
           ],
           "title": "Source Type",
           "type": "string"

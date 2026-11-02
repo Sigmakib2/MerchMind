@@ -1,0 +1,763 @@
+{
+  "$defs": {
+    "Constraints": {
+      "additionalProperties": false,
+      "properties": {
+        "max_product_mass_g": {
+          "default": "400",
+          "gt": 0,
+          "title": "Max Product Mass G",
+          "type": "string"
+        },
+        "minimum_contribution_margin": {
+          "default": "0.30",
+          "ge": 0,
+          "le": 1,
+          "title": "Minimum Contribution Margin",
+          "type": "string"
+        },
+        "require_positive_conservative_margin": {
+          "default": true,
+          "title": "Require Positive Conservative Margin",
+          "type": "boolean"
+        }
+      },
+      "title": "Constraints",
+      "type": "object"
+    },
+    "Finance": {
+      "additionalProperties": false,
+      "properties": {
+        "fx_policy": {
+          "const": "dated_source_required",
+          "default": "dated_source_required",
+          "title": "Fx Policy",
+          "type": "string"
+        },
+        "import_tax_policy": {
+          "const": "manual_verified_input",
+          "default": "manual_verified_input",
+          "title": "Import Tax Policy",
+          "type": "string"
+        },
+        "merchant_vat_treatment": {
+          "default": "unknown",
+          "enum": [
+            "recoverable",
+            "expense",
+            "unknown"
+          ],
+          "title": "Merchant Vat Treatment",
+          "type": "string"
+        },
+        "max_fx_age_days": {
+          "default": 30,
+          "maximum": 365,
+          "minimum": 0,
+          "title": "Max Fx Age Days",
+          "type": "integer"
+        }
+      },
+      "title": "Finance",
+      "type": "object"
+    },
+    "Freight": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "per_gram",
+          "enum": [
+            "per_gram",
+            "fixed_per_unit"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "rate": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rate"
+        },
+        "currency": {
+          "enum": [
+            "AED",
+            "AFN",
+            "ALL",
+            "AMD",
+            "AOA",
+            "ARS",
+            "AUD",
+            "AWG",
+            "AZN",
+            "BAM",
+            "BBD",
+            "BDT",
+            "BGN",
+            "BHD",
+            "BIF",
+            "BMD",
+            "BND",
+            "BOB",
+            "BRL",
+            "BSD",
+            "BTN",
+            "BWP",
+            "BYN",
+            "BZD",
+            "CAD",
+            "CDF",
+            "CHF",
+            "CLP",
+            "CNY",
+            "COP",
+            "CRC",
+            "CUP",
+            "CVE",
+            "CZK",
+            "DJF",
+            "DKK",
+            "DOP",
+            "DZD",
+            "EGP",
+            "ERN",
+            "ETB",
+            "EUR",
+            "FJD",
+            "FKP",
+            "GBP",
+            "GEL",
+            "GHS",
+            "GIP",
+            "GMD",
+            "GNF",
+            "GTQ",
+            "GYD",
+            "HKD",
+            "HNL",
+            "HTG",
+            "HUF",
+            "IDR",
+            "ILS",
+            "INR",
+            "IQD",
+            "IRR",
+            "ISK",
+            "JMD",
+            "JOD",
+            "JPY",
+            "KES",
+            "KGS",
+            "KHR",
+            "KMF",
+            "KPW",
+            "KRW",
+            "KWD",
+            "KYD",
+            "KZT",
+            "LAK",
+            "LBP",
+            "LKR",
+            "LRD",
+            "LSL",
+            "LYD",
+            "MAD",
+            "MDL",
+            "MGA",
+            "MKD",
+            "MMK",
+            "MNT",
+            "MOP",
+            "MRU",
+            "MUR",
+            "MVR",
+            "MWK",
+            "MXN",
+            "MYR",
+            "MZN",
+            "NAD",
+            "NGN",
+            "NIO",
+            "NOK",
+            "NPR",
+            "NZD",
+            "OMR",
+            "PAB",
+            "PEN",
+            "PGK",
+            "PHP",
+            "PKR",
+            "PLN",
+            "PYG",
+            "QAR",
+            "RON",
+            "RSD",
+            "RUB",
+            "RWF",
+            "SAR",
+            "SBD",
+            "SCR",
+            "SDG",
+            "SEK",
+            "SGD",
+            "SHP",
+            "SLE",
+            "SOS",
+            "SRD",
+            "SSP",
+            "STN",
+            "SVC",
+            "SYP",
+            "SZL",
+            "THB",
+            "TJS",
+            "TMT",
+            "TND",
+            "TOP",
+            "TRY",
+            "TTD",
+            "TWD",
+            "TZS",
+            "UAH",
+            "UGX",
+            "USD",
+            "UYU",
+            "UZS",
+            "VED",
+            "VES",
+            "VND",
+            "VUV",
+            "WST",
+            "XAF",
+            "XCD",
+            "XOF",
+            "XPF",
+            "YER",
+            "ZAR",
+            "ZMW",
+            "ZWG"
+          ],
+          "title": "Currency",
+          "type": "string"
+        },
+        "rate_basis": {
+          "const": "billable_mass",
+          "default": "billable_mass",
+          "title": "Rate Basis",
+          "type": "string"
+        },
+        "minimum_charge": {
+          "default": "0",
+          "ge": 0,
+          "title": "Minimum Charge",
+          "type": "string"
+        },
+        "customs_included": {
+          "const": false,
+          "default": false,
+          "title": "Customs Included",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rate",
+        "currency"
+      ],
+      "title": "Freight",
+      "type": "object"
+    },
+    "Merchant": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "merchant_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Merchant Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "market_country": {
+          "title": "Market Country",
+          "type": "string"
+        },
+        "base_currency": {
+          "enum": [
+            "AED",
+            "AFN",
+            "ALL",
+            "AMD",
+            "AOA",
+            "ARS",
+            "AUD",
+            "AWG",
+            "AZN",
+            "BAM",
+            "BBD",
+            "BDT",
+            "BGN",
+            "BHD",
+            "BIF",
+            "BMD",
+            "BND",
+            "BOB",
+            "BRL",
+            "BSD",
+            "BTN",
+            "BWP",
+            "BYN",
+            "BZD",
+            "CAD",
+            "CDF",
+            "CHF",
+            "CLP",
+            "CNY",
+            "COP",
+            "CRC",
+            "CUP",
+            "CVE",
+            "CZK",
+            "DJF",
+            "DKK",
+            "DOP",
+            "DZD",
+            "EGP",
+            "ERN",
+            "ETB",
+            "EUR",
+            "FJD",
+            "FKP",
+            "GBP",
+            "GEL",
+            "GHS",
+            "GIP",
+            "GMD",
+            "GNF",
+            "GTQ",
+            "GYD",
+            "HKD",
+            "HNL",
+            "HTG",
+            "HUF",
+            "IDR",
+            "ILS",
+            "INR",
+            "IQD",
+            "IRR",
+            "ISK",
+            "JMD",
+            "JOD",
+            "JPY",
+            "KES",
+            "KGS",
+            "KHR",
+            "KMF",
+            "KPW",
+            "KRW",
+            "KWD",
+            "KYD",
+            "KZT",
+            "LAK",
+            "LBP",
+            "LKR",
+            "LRD",
+            "LSL",
+            "LYD",
+            "MAD",
+            "MDL",
+            "MGA",
+            "MKD",
+            "MMK",
+            "MNT",
+            "MOP",
+            "MRU",
+            "MUR",
+            "MVR",
+            "MWK",
+            "MXN",
+            "MYR",
+            "MZN",
+            "NAD",
+            "NGN",
+            "NIO",
+            "NOK",
+            "NPR",
+            "NZD",
+            "OMR",
+            "PAB",
+            "PEN",
+            "PGK",
+            "PHP",
+            "PKR",
+            "PLN",
+            "PYG",
+            "QAR",
+            "RON",
+            "RSD",
+            "RUB",
+            "RWF",
+            "SAR",
+            "SBD",
+            "SCR",
+            "SDG",
+            "SEK",
+            "SGD",
+            "SHP",
+            "SLE",
+            "SOS",
+            "SRD",
+            "SSP",
+            "STN",
+            "SVC",
+            "SYP",
+            "SZL",
+            "THB",
+            "TJS",
+            "TMT",
+            "TND",
+            "TOP",
+            "TRY",
+            "TTD",
+            "TWD",
+            "TZS",
+            "UAH",
+            "UGX",
+            "USD",
+            "UYU",
+            "UZS",
+            "VED",
+            "VES",
+            "VND",
+            "VUV",
+            "WST",
+            "XAF",
+            "XCD",
+            "XOF",
+            "XPF",
+            "YER",
+            "ZAR",
+            "ZMW",
+            "ZWG"
+          ],
+          "title": "Base Currency",
+          "type": "string"
+        },
+        "source_countries": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Countries",
+          "type": "array"
+        },
+        "allowed_marketplaces": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Marketplaces",
+          "type": "array"
+        },
+        "preferred_categories": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Preferred Categories",
+          "type": "array"
+        },
+        "excluded_categories": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Excluded Categories",
+          "type": "array"
+        },
+        "constraints": {
+          "$ref": "#/$defs/Constraints"
+        },
+        "freight": {
+          "$ref": "#/$defs/Freight"
+        },
+        "finance": {
+          "$ref": "#/$defs/Finance"
+        },
+        "permissions": {
+          "$ref": "#/$defs/Permissions"
+        }
+      },
+      "required": [
+        "merchant_id",
+        "name",
+        "market_country",
+        "base_currency",
+        "source_countries",
+        "freight"
+      ],
+      "title": "Merchant",
+      "type": "object"
+    },
+    "NicheBrief": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "brief_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Brief Id",
+          "type": "string"
+        },
+        "merchant_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Merchant Id",
+          "type": "string"
+        },
+        "niche": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Niche",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Description",
+          "type": "string"
+        },
+        "market_country": {
+          "title": "Market Country",
+          "type": "string"
+        },
+        "audience_context": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Audience Context",
+          "type": "array"
+        },
+        "product_constraints": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Product Constraints",
+          "type": "array"
+        },
+        "sourcing_hosts": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Sourcing Hosts",
+          "type": "array"
+        },
+        "research_languages": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Research Languages",
+          "type": "array"
+        },
+        "segment_count": {
+          "default": 4,
+          "enum": [
+            3,
+            4
+          ],
+          "title": "Segment Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "brief_id",
+        "merchant_id",
+        "niche",
+        "description",
+        "market_country"
+      ],
+      "title": "NicheBrief",
+      "type": "object"
+    },
+    "Permissions": {
+      "additionalProperties": false,
+      "properties": {
+        "read_only_research": {
+          "const": true,
+          "default": true,
+          "title": "Read Only Research",
+          "type": "boolean"
+        },
+        "outbound_messages": {
+          "const": false,
+          "default": false,
+          "title": "Outbound Messages",
+          "type": "boolean"
+        },
+        "purchasing": {
+          "const": false,
+          "default": false,
+          "title": "Purchasing",
+          "type": "boolean"
+        }
+      },
+      "title": "Permissions",
+      "type": "object"
+    },
+    "ResearchPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "max_requests_per_domain": {
+          "default": 3,
+          "maximum": 50,
+          "minimum": 2,
+          "title": "Max Requests Per Domain",
+          "type": "integer"
+        },
+        "max_response_bytes": {
+          "default": 1000000,
+          "maximum": 10000000,
+          "minimum": 1024,
+          "title": "Max Response Bytes",
+          "type": "integer"
+        },
+        "max_sources": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Max Sources",
+          "type": "integer"
+        },
+        "max_duration_minutes": {
+          "default": 30,
+          "maximum": 60,
+          "minimum": 1,
+          "title": "Max Duration Minutes",
+          "type": "integer"
+        },
+        "max_report_bytes": {
+          "default": 10000000,
+          "maximum": 100000000,
+          "minimum": 1024,
+          "title": "Max Report Bytes",
+          "type": "integer"
+        }
+      },
+      "title": "ResearchPolicy",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "brief": {
+      "$ref": "#/$defs/NicheBrief"
+    },
+    "merchant_snapshot": {
+      "$ref": "#/$defs/Merchant"
+    },
+    "policy_snapshot": {
+      "$ref": "#/$defs/ResearchPolicy"
+    },
+    "research_plan": {
+      "additionalProperties": true,
+      "title": "Research Plan",
+      "type": "object"
+    },
+    "source_scope": {
+      "default": "approved_hosts",
+      "enum": [
+        "approved_hosts",
+        "public_web"
+      ],
+      "title": "Source Scope",
+      "type": "string"
+    },
+    "allowed_hosts": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 50,
+      "title": "Allowed Hosts",
+      "type": "array"
+    },
+    "required_capabilities": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Required Capabilities",
+      "type": "array"
+    },
+    "instructions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Instructions",
+      "type": "array"
+    },
+    "integrity_hash": {
+      "default": "",
+      "title": "Integrity Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "task_id",
+    "created_at",
+    "expires_at",
+    "brief",
+    "merchant_snapshot",
+    "policy_snapshot",
+    "research_plan",
+    "instructions"
+  ],
+  "title": "AgentResearchTask",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/agent-task.schema.json"
+}

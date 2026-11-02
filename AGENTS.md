@@ -12,3 +12,12 @@ MerchMind is a local merchant-research toolkit. Read README.md and docs/status.m
 - Run `uv run pytest -q`, `uv run ruff check .`, `uv run ruff format --check .` and `uv run python scripts/check_skills.py` for relevant changes.
 - Record actual DSH qualification against an exact build. Local skill metadata validation alone is not runtime verification.
 - Do not mark the commercial MVP complete before the retrospective pilot and live-source audit are recorded.
+
+## Agent-led operation
+
+- Use the current runtime's authorized browsing/source tools for research and synthesis. MerchMind requires no separate search/model API integration or keys.
+- Read `docs/agent-workflow.md`. Prepare a scoped task with `merchmind agent prepare`, collect source excerpts and activity, and submit with `merchmind agent complete`.
+- Public-web research requires explicit scope approval; supplier discovery still respects the merchant's approved sourcing hosts. Runtime permissions always take precedence over a task artifact.
+- If browsing is unavailable or blocked, return partial/unavailable research with reasons. Never substitute invented captures, customer preferences, supplier confirmations, tax rates or interviews.
+- Use local CLI tools for schema/evidence checks, comparison, validation, decimal economics and launch estimates. Do not replace deterministic arithmetic with agent prose.
+- Task receipt validation checks submitted provenance, not actual browser telemetry. Enforce real tool/network/time/spend limits in the runtime and keep user data out of unauthorized external actions.

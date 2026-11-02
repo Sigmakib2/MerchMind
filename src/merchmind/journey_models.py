@@ -1,4 +1,4 @@
-"""Contracts for onboarding, connected research, validation and launch planning."""
+"""Contracts for onboarding, comparisons, validation and launch planning."""
 
 from datetime import datetime
 from typing import Literal
@@ -20,7 +20,6 @@ from merchmind.models import (
     Positive,
     Ratio,
     StarterProfile,
-    StarterResearch,
     SupplierQuote,
     Versioned,
     decimal_string,
@@ -73,44 +72,6 @@ class OnboardingAnswers(Versioned):
             sourcing_hosts=self.sourcing_hosts,
             research_languages=self.research_languages,
         )
-
-
-class ResearchConnection(Versioned):
-    search_provider: Literal["brave"] = "brave"
-    synthesis_provider: Literal["deepseek"] = "deepseek"
-    model: str = Field(min_length=1, max_length=100)
-    search_key_env: str = Field(default="BRAVE_SEARCH_API_KEY", pattern=r"^[A-Z][A-Z0-9_]{0,79}$")
-    model_key_env: str = Field(default="DEEPSEEK_API_KEY", pattern=r"^[A-Z][A-Z0-9_]{0,79}$")
-    research_hosts: list[str] = Field(min_length=1, max_length=10)
-    max_search_queries: int = Field(default=4, ge=1, le=8)
-    results_per_query: int = Field(default=5, ge=1, le=10)
-    max_input_characters: int = Field(default=20000, ge=2000, le=50000)
-    max_output_tokens: int = Field(default=4096, ge=512, le=8192)
-    search_price_per_request_usd: Nonnegative | None = None
-    model_input_price_per_million_usd: Nonnegative | None = None
-    model_output_price_per_million_usd: Nonnegative | None = None
-    max_estimated_cost_usd: Positive
-
-    @field_validator("research_hosts")
-    @classmethod
-    def valid_hosts(cls, value: list[str]) -> list[str]:
-        return Merchant.domains(value)
-
-
-class ConnectedResearchResult(Versioned):
-    engine_version: str = __version__
-    run_id: Identifier
-    brief_id: Identifier
-    run_at: datetime
-    status: Literal["complete", "partial"]
-    research: StarterResearch | None
-    sources: list[Evidence]
-    requests: list[dict]
-    configured_cost_upper_estimate_usd: Nonnegative
-    warnings: list[str]
-    connection_snapshot: ResearchConnection
-    brief_snapshot: NicheBrief
-    model_usage: dict[str, int] = Field(default_factory=dict)
 
 
 HypothesisField = Literal[

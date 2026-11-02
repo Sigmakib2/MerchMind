@@ -4,7 +4,7 @@ MerchMind helps small online sellers turn a niche idea into customer hypotheses,
 
 It is built for **physical-product businesses**. You supply the niche, market, sourcing sites and restrictions. Reports show the evidence, assumptions, missing information and calculations behind each result.
 
-**Status: developer alpha.** The local workflows and offline demos work. Live provider accounts, DeepSeek Harness integration, authorized sources and real-store outcomes still need qualification. See [implementation status](docs/status.md).
+**Status: developer alpha.** The local workflows and offline demos work. Agent browsing/runtime integration, authorized sources and real-store outcomes still need qualification. See [implementation status](docs/status.md).
 
 ## Quick start
 
@@ -21,7 +21,7 @@ uv run merchmind demo --mode journey --workspace workspaces/first-journey
 
 If you already have the repository, run the last two commands from its root folder.
 
-Setup downloads the locked dependencies into an isolated Python environment. After setup, this demo needs **no API keys, paid service, AI account or network access**. It uses fictional data and recorded provider responses.
+Setup downloads the locked dependencies into an isolated Python environment. After setup, this demo needs **no API keys, paid service, AI account or network access**. It uses fictional data and a synthetic agent submission.
 
 The demo exercises all five stages. It deliberately includes an unknown product attribute, conflicting customer observations and a conservative launch scenario that exceeds the fictional budget.
 
@@ -45,7 +45,7 @@ Use a new workspace name when repeating a demo, such as `workspaces/second-journ
 | Step | What MerchMind does |
 | --- | --- |
 | **1. Guided setup** | Asks about your business, niche, market, budget, sourcing sites and product restrictions. |
-| **2. Customer research** | Prepares research questions; optionally connects approved Brave search results with DeepSeek synthesis to develop three or four customer hypotheses. |
+| **2. Customer research** | Hands the current agent a scoped research task; its own browsing and reasoning tools produce source-citing customer hypotheses. |
 | **3. Product comparison** | Applies explicit rules to evidenced product attributes and shows matches, mismatches, unknowns and coverage for each group. |
 | **4. Customer validation** | Records aggregate interviews, surveys, sample tests, sales and returns against the original hypotheses. |
 | **5. Launch costs** | Estimates batch cash needs using supplier minimum quantities, applicable price tiers, import costs, samples, setup, ads, contingency and reserves. |
@@ -81,21 +81,19 @@ uv run merchmind profile starter build --workspace workspaces/my-store --brief w
 
 You can import a source-backed synthesis from a merchant or external agent using `build --research FILE`. See the [starter-mode guide](docs/starter-mode.md).
 
-### Connect online research when ready
+### Let your agent handle research
 
-The optional connection uses **Brave Web Search** and **DeepSeek JSON synthesis**. It requires your provider accounts, current configured prices, approved research hosts and explicit sharing consent.
-
-Copy [the connection template](config/research-connection.example.yaml) into your private workspace, set its model, hosts and prices, and export the configured key environment variables. Then run:
+Use the agent runtime you already have, with its own authorized browsing tools. MerchMind requires no separate search/model API account or key.
 
 ```sh
-uv run merchmind profile starter research --workspace workspaces/my-store --brief workspaces/my-store/niche-brief.json --connection workspaces/my-store/research-connection.yaml --online --share-brief
+uv run merchmind agent prepare --workspace workspaces/my-store --brief workspaces/my-store/niche-brief.json --public-web
 ```
 
-This sends the niche brief, queries and public snippets to the providers. Customer files and merchant financial settings are not inserted into prompts. Keys are not saved in reports. Unknown provider prices block execution; estimated limits are separate from provider account billing caps.
+The command creates a task and instructions; it does not launch an agent or browser. The agent reads sources, saves excerpts and synthesizes hypotheses using its existing tools, then submits them with `merchmind agent complete`. It can also prepare product comparisons, supplier/cost inputs and reports through the other local commands.
 
-Collected snippets remain unverified, and synthesized groups remain low-confidence hypotheses. Failed or malformed responses produce partial results with available sources and warnings.
+Use `--research-hosts HOST ...` instead of `--public-web` for a narrower research scope. The agent must preserve blocked/missing sources and return an unavailable result if it has no browsing tools. Captures stay unverified, and the local cost engine handles arithmetic.
 
-See the [connection instructions](docs/merchant-journey.md#2-connected-research) for environment variables, limits and current verification status. Live provider accounts have not yet been qualified; automated tests use mocked responses.
+Read the [agent workflow guide](docs/agent-workflow.md) for task submission, limits and migration from the former provider connector. The runtime controls its own permissions, data handling and usage costs; this workflow does not promise a local or free model.
 
 ## Already have sales history?
 
@@ -145,15 +143,15 @@ Starter-only mode produces unresearched draft groups. Sales-only mode uses a fic
 - Launch estimates depend on supplied costs and documented assumptions, including all ordered units being sellable.
 - The toolkit does not order products, send supplier messages, make payments, modify accounts or bypass login/CAPTCHA restrictions.
 - Services and digital products need different sourcing and economics workflows.
-- Live-provider checks, hosted CI results, DSH qualification and the real-store pilot are separate from local test success.
+- Live agent/browser checks, hosted CI results, DSH qualification and the real-store pilot are separate from local test success.
 
 Read the [source policy](docs/connector-policy.md) and [implementation status](docs/status.md) for details.
 
 ## Privacy and evidence
 
-Workspaces, generated reports, local environments and secret files are ignored by Git. Default workflows keep data local. Connected research shares the niche brief and public snippets only after explicit consent. Validation records and merchant financial files are not inserted into provider prompts.
+Workspaces, generated reports, local environments and secret files are ignored by Git. MerchMind does not send data to a search or model API. The chosen agent runtime controls what it reads, how it handles task context, its browsing tools and any usage charges. Keep private customer records out of public queries or website uploads.
 
-Keep personal information and credentials out of notes and imported records. Unsupported contact fields are rejected, but free-text notes still require review. The ignored `.env` file is not automatically loaded by the application.
+Keep personal information and credentials out of notes and imported records. Unsupported contact fields are rejected, but free-text notes still require review. No search/model API keys or `.env` configuration are required by MerchMind.
 
 Evidence and earlier reports are preserved. Customer-study corrections create new records rather than overwriting old ones, and ledger locks prevent simultaneous commands from bypassing duplicate checks. Content hashes detect accidental edits; they are not a signed, tamper-proof archive.
 
@@ -166,8 +164,8 @@ See [security reporting](SECURITY.md) and the [threat model](docs/threat-model.m
 | `uv` is not found | Install uv, reopen the terminal and check `uv --version`. |
 | A workspace already exists | Choose a new folder. Existing inputs are preserved. |
 | A result is `investigate`, `unknown` or `not_estimated` | Read the report's missing-evidence or missing-input list. |
-| Connected research cannot start | Check keys, configured prices, approved hosts and both consent flags. |
-| A provider returns a partial result | Review its sources and warnings; correct the connection or use a manual research import. |
+| Agent research cannot start | Check that the current agent has authorized browsing tools and an approved source scope. |
+| The agent reports partial/unavailable research | Review source failures and unresolved questions; never substitute guessed research. |
 | A financial value fails validation | Use quoted decimal strings, such as `"17.50"`, with explicit currency and units. |
 | The validation ledger is busy | Retry after the other operation finishes; see the guide before removing a stale lock. |
 

@@ -1,0 +1,304 @@
+{
+  "$defs": {
+    "AgentActivity": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "search",
+            "browse",
+            "synthesize"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "performed_at": {
+          "format": "date-time",
+          "title": "Performed At",
+          "type": "string"
+        },
+        "source_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Uri"
+        },
+        "query": {
+          "anyOf": [
+            {
+              "maxLength": 1500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query"
+        }
+      },
+      "required": [
+        "action",
+        "performed_at"
+      ],
+      "title": "AgentActivity",
+      "type": "object"
+    },
+    "AgentCapture": {
+      "additionalProperties": false,
+      "properties": {
+        "capture_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Capture Id",
+          "type": "string"
+        },
+        "source_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Source Uri"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 10000,
+          "minLength": 10,
+          "title": "Excerpt",
+          "type": "string"
+        }
+      },
+      "required": [
+        "capture_id",
+        "source_uri",
+        "retrieved_at",
+        "title",
+        "excerpt"
+      ],
+      "title": "AgentCapture",
+      "type": "object"
+    },
+    "SegmentHypothesis": {
+      "additionalProperties": false,
+      "properties": {
+        "segment_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 150,
+          "minLength": 3,
+          "title": "Name",
+          "type": "string"
+        },
+        "use_context": {
+          "maxLength": 1000,
+          "minLength": 10,
+          "title": "Use Context",
+          "type": "string"
+        },
+        "possible_goals": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Possible Goals",
+          "type": "array"
+        },
+        "possible_buying_triggers": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Possible Buying Triggers",
+          "type": "array"
+        },
+        "possible_objections": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Possible Objections",
+          "type": "array"
+        },
+        "product_search_terms": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Product Search Terms",
+          "type": "array"
+        },
+        "validation_questions": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Validation Questions",
+          "type": "array"
+        },
+        "kind": {
+          "default": "merchant_hypothesis",
+          "enum": [
+            "merchant_hypothesis",
+            "research_inference"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "confidence": {
+          "default": "low",
+          "enum": [
+            "low",
+            "medium"
+          ],
+          "title": "Confidence",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "counterevidence_ids": {
+          "items": {
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Counterevidence Ids",
+          "type": "array"
+        },
+        "status": {
+          "const": "unvalidated",
+          "default": "unvalidated",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "segment_id",
+        "name",
+        "use_context",
+        "possible_goals",
+        "possible_buying_triggers",
+        "possible_objections",
+        "product_search_terms",
+        "validation_questions"
+      ],
+      "title": "SegmentHypothesis",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "brief_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Brief Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "complete",
+        "partial",
+        "unavailable"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "runtime": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Runtime",
+      "type": "string"
+    },
+    "tools_used": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 20,
+      "title": "Tools Used",
+      "type": "array"
+    },
+    "captures": {
+      "items": {
+        "$ref": "#/$defs/AgentCapture"
+      },
+      "maxItems": 100,
+      "title": "Captures",
+      "type": "array"
+    },
+    "activities": {
+      "items": {
+        "$ref": "#/$defs/AgentActivity"
+      },
+      "maxItems": 500,
+      "title": "Activities",
+      "type": "array"
+    },
+    "segments": {
+      "items": {
+        "$ref": "#/$defs/SegmentHypothesis"
+      },
+      "maxItems": 4,
+      "title": "Segments",
+      "type": "array"
+    },
+    "unresolved": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 50,
+      "title": "Unresolved",
+      "type": "array"
+    }
+  },
+  "required": [
+    "task_id",
+    "brief_id",
+    "status",
+    "runtime"
+  ],
+  "title": "AgentSubmission",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/agent-submission.schema.json"
+}

@@ -9,8 +9,9 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from merchmind import __version__
+from merchmind.agent import complete_agent_task, prepare_agent_task, save_agent_task
+from merchmind.agent_models import AgentResearchTask, AgentSubmission
 from merchmind.comparison import compare_products, comparison_markdown
-from merchmind.connected import connect_research
 from merchmind.demo import data
 from merchmind.demo import merchant as demo_merchant
 from merchmind.economics import estimate
@@ -20,7 +21,6 @@ from merchmind.journey_models import (
     ComparisonInput,
     LaunchInput,
     OnboardingAnswers,
-    ResearchConnection,
     ValidationEvent,
 )
 from merchmind.journey_storage import save_artifact
@@ -62,6 +62,26 @@ def parser() -> argparse.ArgumentParser:
     )
     root.add_argument("--version", action="version", version=__version__)
     commands = root.add_subparsers(dest="command", required=True)
+    agent = commands.add_parser(
+        "agent", help="Hand research to the current agent; no search/model API keys required"
+    ).add_subparsers(dest="action", required=True)
+    prepare_agent = agent.add_parser("prepare")
+    prepare_agent.add_argument("--workspace", type=Path, required=True)
+    prepare_agent.add_argument("--brief", type=Path, required=True)
+    prepare_agent.add_argument(
+        "--research-hosts",
+        nargs="+",
+        help="Explicitly approved research hosts; defaults to merchant allowlist",
+    )
+    prepare_agent.add_argument(
+        "--public-web",
+        action="store_true",
+        help="Explicitly permit read-only public-web research through runtime tools",
+    )
+    complete_agent = agent.add_parser("complete")
+    complete_agent.add_argument("--workspace", type=Path, required=True)
+    complete_agent.add_argument("--task", type=Path, required=True)
+    complete_agent.add_argument("--submission", type=Path, required=True)
     launch = (
         commands.add_parser("launch", help="Estimate total startup cash")
         .add_subparsers(dest="action", required=True)
@@ -121,13 +141,8 @@ def parser() -> argparse.ArgumentParser:
                 help="Reviewed StarterResearch JSON; omitted input produces unresearched draft seeds",
             )
         if name == "research":
-            action.add_argument("--connection", type=Path, required=True)
-            action.add_argument("--online", action="store_true")
-            action.add_argument(
-                "--share-brief",
-                action="store_true",
-                help="Permit sending only the niche brief and public snippets to providers",
-            )
+            action.add_argument("--research-hosts", nargs="+")
+            action.add_argument("--public-web", action="store_true")
     cost = (
         commands.add_parser("cost")
         .add_subparsers(dest="action", required=True)
@@ -236,7 +251,7 @@ def execute(args: argparse.Namespace) -> dict:
         paths, warnings = onboard(answers, args.workspace)
         result = {
             "merchant_id": answers.merchant_id,
-            "next_command": "profile starter prepare",
+            "next_command": "agent prepare",
             "configuration_source": "merchant_answers",
         }
     elif args.command == "init":
@@ -245,7 +260,7 @@ def execute(args: argparse.Namespace) -> dict:
     elif args.command == "demo" and args.mode == "journey":
         paths, result = run_journey_demo(args.workspace)
         warnings = [
-            "Entire five-stage journey is synthetic. Connected research uses a local recording, makes no network requests and consumes no paid tokens."
+            "Entire five-stage journey is synthetic. Agent research uses a local submission fixture; no browsing or API requests are performed."
         ]
     elif args.command == "demo" and args.mode == "starter":
         paths = initialize(args.workspace)
@@ -343,6 +358,40 @@ def execute(args: argparse.Namespace) -> dict:
                 "research_policy": research_policy.model_dump(mode="json"),
                 "configuration_valid": True,
             }
+        elif args.command == "agent":
+            if args.action == "prepare":
+                task = prepare_agent_task(
+                    NicheBrief.model_validate(load(args.brief)),
+                    merchant,
+                    research_policy,
+                    research_hosts=args.research_hosts,
+                    public_web=args.public_web,
+                )
+                paths = save_agent_task(task, args.workspace)
+                result = {
+                    "status": "awaiting_agent",
+                    "task_id": task.task_id,
+                    "api_keys_required": False,
+                }
+                warnings = [
+                    "Task created locally. Actual research requires the current agent's authorized browsing tools."
+                ]
+            else:
+                task = AgentResearchTask.model_validate(load(args.task))
+                receipt, paths = complete_agent_task(
+                    task,
+                    AgentSubmission.model_validate(load(args.submission)),
+                    args.workspace,
+                    merchant,
+                    research_policy,
+                )
+                result = {
+                    "status": receipt.status,
+                    "source_count": len(receipt.sources),
+                    "local_network_requests": 0,
+                }
+                warnings = receipt.warnings
+                run_id = receipt.task_id
         elif args.command == "launch":
             launch_report = estimate_launch(LaunchInput.model_validate(load(args.input)), merchant)
             paths = save_artifact(
@@ -425,37 +474,23 @@ def execute(args: argparse.Namespace) -> dict:
                 if args.starter_action == "prepare":
                     result = research_plan(brief, merchant, research_policy)
                 elif args.starter_action == "research":
-                    connection = ResearchConnection.model_validate(load(args.connection))
-                    connected = connect_research(
+                    task = prepare_agent_task(
                         brief,
                         merchant,
                         research_policy,
-                        connection,
-                        online=args.online,
-                        share_brief=args.share_brief,
+                        research_hosts=args.research_hosts,
+                        public_web=args.public_web,
                     )
-                    root = private_path(args.workspace, f"connected/{connected.run_id}")
-                    if (
-                        len(connected.model_dump_json(indent=2).encode())
-                        > research_policy.max_report_bytes
-                    ):
-                        raise ValueError("Connected research exceeds report storage budget")
-                    paths = [write(root / "connected-research.json", connected)]
-                    if connected.research is not None:
-                        paths.append(write(root / "research.json", connected.research))
-                        profile = build_starter_profile(
-                            brief, merchant, research_policy, connected.research
-                        )
-                        paths.extend(
-                            save_starter_profile(profile, merchant, args.workspace, research_policy)
-                        )
+                    paths = save_agent_task(task, args.workspace)
                     result = {
-                        "status": connected.status,
-                        "source_count": len(connected.sources),
-                        "requests": len(connected.requests),
+                        "status": "awaiting_agent",
+                        "task_id": task.task_id,
+                        "next_command": "agent complete",
+                        "api_keys_required": False,
                     }
-                    warnings = connected.warnings
-                    run_id = connected.run_id
+                    warnings = [
+                        "Use an agent with browsing/source tools to perform this task. The CLI does not launch an agent or perform web research."
+                    ]
                 else:
                     research = (
                         StarterResearch.model_validate(load(args.research))

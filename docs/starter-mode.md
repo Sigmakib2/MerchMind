@@ -30,7 +30,7 @@ Prepare a research plan:
 uv run merchmind profile starter prepare --workspace workspaces/my-store --brief workspaces/my-store/niche-brief.json
 ```
 
-The response supplies research queries and questions about local use contexts, complaints, alternatives and counterevidence. It does not run a search. A merchant/external agent can collect evidence, or use the optional connected Brave/DeepSeek workflow in the [merchant journey guide](merchant-journey.md). The domain engine remains provider-independent. There is no psychological model or Alibaba connector.
+The response supplies research queries and questions about local use contexts, complaints, alternatives and counterevidence. It does not run a search. A merchant/external agent can collect evidence, or use the agent-led browsing workflow in the [merchant journey guide](merchant-journey.md). The domain engine remains provider-independent. There is no psychological model or Alibaba connector.
 
 You can also create low-confidence draft seeds while research is unavailable:
 

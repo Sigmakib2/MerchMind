@@ -65,7 +65,7 @@ def research_plan(brief: NicheBrief, merchant: Merchant, policy: ResearchPolicy)
             "A merchant or external agent must conduct authorized research; this command performs no search.",
             "Use aggregate market evidence and product-use contexts. Do not infer preferences from sensitive traits or location alone.",
             "Retail listings establish advertised availability or price, not actual demand or buying psychology.",
-            "Return StarterResearch JSON with three or four distinct segments, source URLs, dates, confidence and counterevidence.",
+            "For the agent handoff, return AgentSubmission with source captures and three/four distinct hypotheses. Existing manual imports may still use StarterResearch JSON.",
             "All segments remain unvalidated hypotheses. Do not fabricate budgets, audience sizes, sales or supplier terms.",
         ],
     }

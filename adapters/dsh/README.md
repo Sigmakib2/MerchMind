@@ -2,6 +2,8 @@
 
 MerchMind exposes six portable skills in `.agents/skills/` and a runtime-independent JSON CLI. It imports no DSH libraries and needs no model for its offline demo or economics engine.
 
+Live research is agent-led: the runtime's existing browsing and reasoning tools collect sources and synthesize an `AgentSubmission`. The local `agent prepare/complete` commands handle the task contract, receipts and profile outputs without a separate search/model API. Read `docs/agent-workflow.md`. Preparing a task does not start DSH or grant new tool permissions.
+
 Upstream's [skill subsystem documentation](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/skills.md) lists project `.agents/skills/` as a local discovery root beneath the nearest Git repository. That document was inspected on 2026-11-01. Actual discovery depends on the installed DSH build and composition.
 
 ## Local contract smoke

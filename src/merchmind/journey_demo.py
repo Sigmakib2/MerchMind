@@ -1,87 +1,25 @@
-"""A recorded, entirely synthetic five-stage journey. Never calls a live provider."""
+"""A recorded, entirely synthetic five-stage journey. Never starts a browser or calls an API."""
 
-import json
 from datetime import timedelta
 from pathlib import Path
 
+from merchmind.agent import complete_agent_task, prepare_agent_task, save_agent_task
+from merchmind.agent_models import AgentActivity, AgentCapture, AgentSubmission
 from merchmind.comparison import compare_products, comparison_markdown
-from merchmind.connected import connect_research
 from merchmind.demo import data
 from merchmind.journey_models import (
     ComparisonInput,
     LaunchInput,
     OnboardingAnswers,
-    ResearchConnection,
     ValidationEvent,
 )
 from merchmind.journey_storage import save_artifact
 from merchmind.launch import estimate_launch, launch_markdown
 from merchmind.models import CostInput, Merchant, ResearchPolicy, SupplierQuote
 from merchmind.onboarding import onboard
-from merchmind.starter import build_starter_profile, save_starter_profile, seed_segments
+from merchmind.starter import build_starter_profile, seed_segments
 from merchmind.storage import evidence_record, now, private_path, write
 from merchmind.validation import add_observation, summarize_validation, validation_markdown
-
-
-class RecordedResearch:
-    """The same request contract as live adapters, backed only by local demo data."""
-
-    def __init__(self, brief):
-        self.brief = brief
-
-    @staticmethod
-    def source():
-        record = {
-            "url": "https://example.com/recorded-desk-research",
-            "title": "Fictional desk-use study",
-            "snippet": "Synthetic research for demonstration, not a real study.",
-        }
-        return evidence_record(
-            record,
-            kind="web_search_result",
-            reference=record["url"],
-            uri=record["url"],
-            assertion="Synthetic search receipt",
-            verified="unverified",
-        )
-
-    def request(self, host, path, headers, body, **limits):
-        if host == "api.search.brave.com":
-            return {
-                "web": {
-                    "results": [
-                        {
-                            "url": "https://example.com/recorded-desk-research",
-                            "title": "Fictional desk-use study",
-                            "description": "Synthetic research for demonstration, not a real study.",
-                        }
-                    ]
-                }
-            }
-        segments = seed_segments(self.brief)
-        contexts = [
-            "A possible need for a simple first desk setup; synthetic hypothesis.",
-            "A possible need to store accessories on a small desk; synthetic hypothesis.",
-            "A possible need to carry accessories between desks; synthetic hypothesis.",
-            "A possible need to improve an existing desk setup; synthetic hypothesis.",
-        ]
-        for segment, context in zip(segments, contexts, strict=True):
-            segment.use_context = context
-            segment.kind = "research_inference"
-            segment.evidence_ids = [self.source().evidence_id]
-        return {
-            "choices": [
-                {
-                    "finish_reason": "stop",
-                    "message": {
-                        "content": json.dumps(
-                            {"segments": [s.model_dump(mode="json") for s in segments]}
-                        )
-                    },
-                }
-            ],
-            "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
-        }
 
 
 def run_journey_demo(workspace: Path) -> tuple[list[Path], dict]:
@@ -104,36 +42,48 @@ def run_journey_demo(workspace: Path) -> tuple[list[Path], dict]:
     merchant = Merchant.model_validate(load(workspace / "merchant.yaml"))
     policy = ResearchPolicy()
     brief = answers.brief()
-    config = ResearchConnection(
-        model="offline-recording",
-        research_hosts=["example.com"],
-        search_price_per_request_usd="0",
-        model_input_price_per_million_usd="0",
-        model_output_price_per_million_usd="0",
-        max_estimated_cost_usd="1",
+    task = prepare_agent_task(brief, merchant, policy, research_hosts=["example.com"])
+    paths.extend(save_agent_task(task, workspace))
+    capture = AgentCapture(
+        capture_id="demo-capture",
+        source_uri="https://example.com/synthetic-desk-research",
+        retrieved_at=now(),
+        title="Fictional desk-use study",
+        excerpt="Entirely synthetic desk-use research for an offline demonstration, not real customer evidence.",
     )
-    connected = connect_research(
-        brief,
-        merchant,
-        policy,
-        config,
-        online=True,
-        share_brief=True,
-        transport=RecordedResearch(brief),
-        credentials=("synthetic-offline-key", "synthetic-offline-key"),
+    segments = seed_segments(brief)
+    contexts = [
+        "A possible need for a simple first desk setup; synthetic hypothesis.",
+        "A possible need to store accessories on a small desk; synthetic hypothesis.",
+        "A possible need to carry accessories between desks; synthetic hypothesis.",
+        "A possible need to improve an existing desk setup; synthetic hypothesis.",
+    ]
+    for segment, context in zip(segments, contexts, strict=True):
+        segment.use_context = context
+        segment.kind = "research_inference"
+        segment.evidence_ids = [capture.capture_id]
+    submission = AgentSubmission(
+        task_id=task.task_id,
+        brief_id=brief.brief_id,
+        status="complete",
+        runtime="offline-fixture",
+        tools_used=["synthetic_fixture"],
+        captures=[capture],
+        activities=[
+            AgentActivity(
+                action="browse", performed_at=capture.retrieved_at, source_uri=capture.source_uri
+            )
+        ],
+        segments=segments,
+        unresolved=["All research and tool activity in this demo are fictional."],
     )
-    if connected.research is None:
-        raise ValueError("Recorded research fixture failed")
     inputs = private_path(workspace, "demo-inputs")
-    paths.extend(
-        [
-            write(inputs / "connection.json", config),
-            write(inputs / "connected-research.json", connected),
-            write(inputs / "research.json", connected.research),
-        ]
-    )
-    profile = build_starter_profile(brief, merchant, policy, connected.research)
-    paths.extend(save_starter_profile(profile, merchant, workspace, policy))
+    paths.append(write(inputs / "agent-submission.json", submission))
+    receipt, agent_paths = complete_agent_task(task, submission, workspace, merchant, policy)
+    paths.extend(agent_paths)
+    if receipt.research is None:
+        raise ValueError("Synthetic agent submission failed")
+    profile = build_starter_profile(brief, merchant, policy, receipt.research)
     product_source = evidence_record(
         {"synthetic": True, "setup_simple": "true", "foldable": "true", "mass_g": "180"},
         kind="merchant_record",

@@ -1,6 +1,6 @@
 # From a niche idea to a product test and launch estimate
 
-The merchant journey has five steps: guided business setup, optional connected research, product comparison, customer validation and total launch cash planning. Purchasing, payments, messages and account changes remain outside the toolkit.
+The merchant journey has five steps: guided business setup, agent-led research, product comparison, customer validation and total launch cash planning. Purchasing, payments, messages and account changes remain outside the toolkit.
 
 ## Try all five stages offline
 
@@ -10,7 +10,7 @@ uv run merchmind demo --mode journey --workspace workspaces/my-journey-demo
 
 Open the returned Markdown files for customer profiles, product comparison, validation summary and launch budget. `demo-inputs/` contains the exact input formats used by the commands below.
 
-This demo creates a fictional desk-accessory business, passes recorded search/model responses through the research adapter, builds four hypotheses, compares a fictional product, records support and contradiction, and estimates a 100-unit launch. No network request or paid model call is made. Research, interviews, product details, prices and taxes are synthetic. Its conservative required cash is 63,390 BDT against a fictional 62,000 BDT budget; these are arithmetic fixtures, not actual Bangladesh costs.
+This demo creates a fictional desk-accessory business, validates a synthetic agent source capture and research submission, builds four hypotheses, compares a fictional product, records support and contradiction, and estimates a 100-unit launch. No browser, network request or separate model API call is used. Research, interviews, product details, prices and taxes are synthetic. Its conservative required cash is 63,390 BDT against a fictional 62,000 BDT budget; these are arithmetic fixtures, not actual Bangladesh costs.
 
 ## 1 Guided setup
 
@@ -28,34 +28,19 @@ uv run merchmind onboard --workspace workspaces/my-store --answers examples/onbo
 
 Choose one approach and a new workspace. Setup refuses to overwrite existing files. Replace the sample details before real research. Outputs include merchant settings, niche brief, scoring/source policies, an onboarding snapshot and readiness checks. Unknown shipping blocks complete unit-cost totals rather than becoming free shipping. VAT treatment remains unknown unless supplied explicitly in the answer file or later merchant configuration.
 
-## 2 Connected research
+## 2 Agent-led research
 
-The optional adapters use Brave Web Search and DeepSeek JSON chat completions. They are independent of DeepSeek Harness and the deterministic economics engine. Manual/external-agent research imports continue to work.
-
-Copy `config/research-connection.example.yaml` into your private workspace. Set your supported model, exact approved research hostnames, request/input/output limits, current provider prices and estimated spend cap. Example prices are null: unknown rates block execution, rather than being silently zero. A known free allowance can be entered as zero when it actually applies. Configured-rate estimates are not a provider billing guarantee; enforce account spending limits with the providers.
-
-Set keys in environment variables, never research/configuration files. In PowerShell:
-
-```powershell
-$env:BRAVE_SEARCH_API_KEY = "replace-with-your-key"
-$env:DEEPSEEK_API_KEY = "replace-with-your-key"
-```
-
-Explicitly enable network requests and sharing of the niche brief:
+The current agent uses its own authorized browsing/source tools and reasoning. MerchMind calls no separate search/model API and needs no provider account, API key or price configuration.
 
 ```sh
-uv run merchmind profile starter research --workspace workspaces/my-store --brief workspaces/my-store/niche-brief.json --connection workspaces/my-store/research-connection.yaml --online --share-brief
+uv run merchmind agent prepare --workspace workspaces/my-store --brief workspaces/my-store/niche-brief.json --public-web
 ```
 
-Only the niche brief, queries and public snippets enter provider requests. Order/customer files and merchant financial settings are not inserted into prompts. Keys are excluded from saved artifacts and request records. The ignored `.env` file is not automatically loaded by this application.
+The agent reads the generated task, captures sources, writes an AgentSubmission, and runs `merchmind agent complete` with the workspace, task and submission paths. For restricted research, use explicit `--research-hosts HOST ...` instead. The `profile starter research` alias also prepares a task.
 
-Results are filtered to approved research hosts, deduplicated and capped by source/request limits. Only fixed provider API hosts are contacted, with public-IP pinned TLS, no redirects/cookies and bounded responses/duration. Search result pages are not fetched directly. Native DNS resolution still depends on the operating system.
+Complete accepted submissions produce source receipts and low-confidence starter hypotheses. Missing browsing or incomplete access produces explicit unavailable/partial results, without fabricated replacement groups. The Python CLI validates task/source/reference data and computes costs; it does not launch an agent or supply a browser. Runtime permissions, data handling and billing remain that runtime's responsibility.
 
-Synthesis must return three/four distinct, source-citing hypotheses. Invalid citations, counts, duplicates, malformed output and truncation are rejected. Search snippets remain unverified; resulting hypotheses remain low-confidence and unvalidated. No tools are exposed to the model. Imported content is data, never executable instructions.
-
-Outputs preserve sources, sharing/configuration snapshots, request records and returned token usage. A successful run also saves reusable research and profile files. Failures produce a partial artifact with collected sources and warnings, without fabricated fallback profiles.
-
-Contracts follow the [Brave search documentation](https://api-dashboard.search.brave.com/app/documentation/web-search/get-started), [DeepSeek JSON output guide](https://api-docs.deepseek.com/guides/json_mode/) and [chat-completion reference](https://api-docs.deepseek.com/api/create-chat-completion/). Tests use mocked providers. Live account qualification remains pending.
+See the [agent workflow guide](agent-workflow.md) for the full submission contract, source/time budgets, capture hashes, runtime limits and migration from the removed provider adapters.
 
 ## 3 Product-to-profile comparison
 

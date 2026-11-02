@@ -8,7 +8,7 @@ The requirements document remains the product specification. This first implemen
 | Merchant intelligence | CSV/JSON catalog, sales and returns imports; aggregate evidence-backed observations; versioned profiles |
 | Starter customer hypotheses | Niche briefs, research plans, three/four generic draft groups or source-backed research imports, confidence/counterevidence and guided sourcing queries; no sales history required |
 | Guided onboarding | Interactive questions or answer files create merchant configuration, niche brief, budget input and readiness checks without demo sales |
-| Connected starter research | Optional Brave + DeepSeek adapters, explicit sharing consent, approved research hosts, configured-price budgets, partial results and mocked provider tests; live account qualification pending |
+| Agent-led starter research | Provider-free task handoff, runtime browsing, captured excerpts, activity/source/time/reference checks, immutable receipts and explicit partial/unavailable results; live runtime qualification pending |
 | Product comparison | Explicit evidenced attribute rules, coverage, unknown/mismatched facts and merchant mass/category restrictions; conditional hypothesis fit rather than purchase prediction |
 | Customer validation | Version-linked interview/survey/sample/sales/return observations, duplicate-study checks, preserved corrections and support/contradiction summaries |
 | Launch cash | MOQ/tier-aware batch cash with upfront VAT, samples, setup, ads, packaging, contingency and reserves; unknown amounts stay unknown |

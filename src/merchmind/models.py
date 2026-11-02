@@ -165,6 +165,7 @@ class Evidence(Versioned):
         "government",
         "inference",
         "web_search_result",
+        "agent_web_capture",
     ]
     source_uri: SourceLink = None
     source_record_ref: str

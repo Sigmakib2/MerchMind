@@ -3,14 +3,13 @@
 import json
 from pathlib import Path
 
+from merchmind.agent_models import AgentResearchReceipt, AgentResearchTask, AgentSubmission
 from merchmind.journey_models import (
     ComparisonInput,
     ComparisonReport,
-    ConnectedResearchResult,
     LaunchInput,
     LaunchReport,
     OnboardingAnswers,
-    ResearchConnection,
     ValidationEvent,
     ValidationRecord,
     ValidationSummary,
@@ -33,14 +32,15 @@ from merchmind.models import (
 )
 
 MODELS = {
+    "agent-task": AgentResearchTask,
+    "agent-submission": AgentSubmission,
+    "agent-receipt": AgentResearchReceipt,
     "validation-event": ValidationEvent,
     "validation-record": ValidationRecord,
     "validation-summary": ValidationSummary,
     "launch-input": LaunchInput,
     "launch-report": LaunchReport,
     "onboarding-answers": OnboardingAnswers,
-    "research-connection": ResearchConnection,
-    "connected-research": ConnectedResearchResult,
     "comparison-input": ComparisonInput,
     "comparison-report": ComparisonReport,
     "merchant": Merchant,

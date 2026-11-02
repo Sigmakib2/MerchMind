@@ -19,8 +19,8 @@ Canonical JSON Schemas live in `schemas/`, are generated from `src/merchmind/mod
 | Starter research | brief_id, segments, sources | Hypotheses with goals, objections, product-search terms, confidence, support and counterevidence |
 | Starter profile | profile_id, profile_version, brief, research, missing_evidence | Separate unvalidated profile artifact; no sales imports required |
 | Onboarding answers | merchant_id, niche, country/currency, constraints, optional shipping/budget | Guided intake; unknown shipping is null |
-| Research connection | provider/model, approved research hosts, environment key names, rate estimates, limits | Optional connection settings; never contains credential values |
-| Connected research | brief/config snapshots, sources, requests, usage, research or partial status | Public snippets remain unverified |
+| Agent task | task_id, approved brief, merchant/policy snapshots, source scope, expiry, integrity hash | Provider-free handoff to the current agent runtime |
+| Agent submission/receipt | captures, runtime/tool activity, hypotheses, unresolved questions, task snapshot, source hashes | Agent-reported provenance; captures remain unverified and incomplete work stays explicit |
 | Comparison input/report | exact profile version, product facts, explicit criteria, rule results and coverage | Hypothetical attribute fit, separate from opportunity scoring |
 | Validation event/record/summary | study ID, exact hypothesis, method, outcome, dates, source records, correction links | Append-only first-party support and contradiction; no automatic statistical validation |
 | Launch input/report | unit scenarios, quote, order size, startup cash items, sources, scenario totals | Upfront cash includes all import VAT and a separately declared reserve |
