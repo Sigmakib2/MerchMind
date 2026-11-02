@@ -3,21 +3,46 @@
 import json
 from pathlib import Path
 
+from merchmind.journey_models import (
+    ComparisonInput,
+    ComparisonReport,
+    ConnectedResearchResult,
+    LaunchInput,
+    LaunchReport,
+    OnboardingAnswers,
+    ResearchConnection,
+    ValidationEvent,
+    ValidationRecord,
+    ValidationSummary,
+)
 from merchmind.models import (
     CostInput,
     CustomerProfile,
     Evidence,
     Feedback,
     Merchant,
+    NicheBrief,
     Product,
     Report,
     ResearchPolicy,
     ResearchRequest,
     ScoringConfig,
+    StarterProfile,
+    StarterResearch,
     SupplierQuote,
 )
 
 MODELS = {
+    "validation-event": ValidationEvent,
+    "validation-record": ValidationRecord,
+    "validation-summary": ValidationSummary,
+    "launch-input": LaunchInput,
+    "launch-report": LaunchReport,
+    "onboarding-answers": OnboardingAnswers,
+    "research-connection": ResearchConnection,
+    "connected-research": ConnectedResearchResult,
+    "comparison-input": ComparisonInput,
+    "comparison-report": ComparisonReport,
     "merchant": Merchant,
     "product": Product,
     "evidence": Evidence,
@@ -29,6 +54,9 @@ MODELS = {
     "customer-profile": CustomerProfile,
     "scoring": ScoringConfig,
     "research-policy": ResearchPolicy,
+    "niche-brief": NicheBrief,
+    "starter-research": StarterResearch,
+    "starter-profile": StarterProfile,
 }
 
 

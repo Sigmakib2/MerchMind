@@ -1,4 +1,4 @@
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import ROUND_HALF_UP, Decimal, localcontext
 from pathlib import Path
 
 from merchmind.models import Report
@@ -21,9 +21,12 @@ def escape(value: object) -> str:
 
 
 def amount(value: Decimal | None) -> str:
-    return (
-        "Unknown" if value is None else str(value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
-    )
+    if value is None:
+        return "Unknown"
+    with localcontext() as context:
+        # Display precision must cover the integer part as well as two decimal places.
+        context.prec = max(38, len(value.as_tuple().digits), value.adjusted() + 3)
+        return str(value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
 
 
 def markdown(report: Report) -> str:

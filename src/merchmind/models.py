@@ -11,12 +11,20 @@ from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, field_valida
 def decimal_string(value: object) -> Decimal:
     if not isinstance(value, (str, Decimal)):
         raise ValueError("Commercial decimals must be quoted strings, not JSON numbers")
+    if isinstance(value, str) and len(value) > 1024:
+        raise ValueError("Decimal exceeds supported precision or exponent range")
     try:
         result = Decimal(value)
     except Exception as exc:
         raise ValueError("Invalid decimal") from exc
     if not result.is_finite():
         raise ValueError("Decimal must be finite")
+    if (
+        len(result.as_tuple().digits) > 1000
+        or abs(result.as_tuple().exponent) > 1000
+        or abs(result.adjusted()) > 1000
+    ):
+        raise ValueError("Decimal exceeds supported precision or exponent range")
     return result
 
 
@@ -68,7 +76,7 @@ class Versioned(Model):
 
 class Freight(Model):
     mode: Literal["per_gram", "fixed_per_unit"] = "per_gram"
-    rate: Nonnegative
+    rate: Nonnegative | None
     currency: Currency
     rate_basis: Literal["billable_mass"] = "billable_mass"
     minimum_charge: Nonnegative = Decimal("0")
@@ -156,6 +164,7 @@ class Evidence(Versioned):
         "independent_review",
         "government",
         "inference",
+        "web_search_result",
     ]
     source_uri: SourceLink = None
     source_record_ref: str
@@ -436,6 +445,106 @@ class CustomerProfile(Versioned):
     findings: list[Finding]
     limitations: list[str]
     evidence_ids: list[Identifier]
+
+
+class NicheBrief(Versioned):
+    brief_id: Identifier
+    merchant_id: Identifier
+    niche: str = Field(min_length=3, max_length=200)
+    description: str = Field(min_length=10, max_length=2000)
+    market_country: str
+    audience_context: list[str] = Field(default_factory=list, max_length=20)
+    product_constraints: list[str] = Field(default_factory=list, max_length=20)
+    sourcing_hosts: list[str] = Field(default_factory=list, max_length=20)
+    research_languages: list[str] = Field(
+        default_factory=lambda: ["English"], min_length=1, max_length=5
+    )
+    segment_count: Literal[3, 4] = 4
+
+    @field_validator("market_country")
+    @classmethod
+    def country(cls, value: str) -> str:
+        return Merchant.country(value)
+
+    @field_validator("sourcing_hosts")
+    @classmethod
+    def domains(cls, value: list[str]) -> list[str]:
+        return Merchant.domains(value)
+
+
+class SegmentHypothesis(Model):
+    segment_id: Identifier
+    name: str = Field(min_length=3, max_length=150)
+    use_context: str = Field(min_length=10, max_length=1000)
+    possible_goals: list[str] = Field(min_length=1, max_length=10)
+    possible_buying_triggers: list[str] = Field(min_length=1, max_length=10)
+    possible_objections: list[str] = Field(min_length=1, max_length=10)
+    product_search_terms: list[str] = Field(min_length=1, max_length=10)
+    validation_questions: list[str] = Field(min_length=1, max_length=10)
+    kind: Literal["merchant_hypothesis", "research_inference"] = "merchant_hypothesis"
+    confidence: Literal["low", "medium"] = "low"
+    evidence_ids: list[Identifier] = Field(default_factory=list)
+    counterevidence_ids: list[Identifier] = Field(default_factory=list)
+    status: Literal["unvalidated"] = "unvalidated"
+
+    @model_validator(mode="after")
+    def provenance(self) -> Self:
+        if self.kind == "research_inference" and not self.evidence_ids:
+            raise ValueError("Research inferences must cite supporting evidence")
+        if self.kind == "merchant_hypothesis" and self.confidence != "low":
+            raise ValueError("Unresearched merchant hypotheses must have low confidence")
+        if set(self.evidence_ids) & set(self.counterevidence_ids):
+            raise ValueError("Supporting and contradicting evidence must be distinct")
+        return self
+
+
+class StarterResearch(Versioned):
+    brief_id: Identifier
+    segments: list[SegmentHypothesis] = Field(min_length=3, max_length=4)
+    sources: list[Evidence] = Field(default_factory=list, max_length=100)
+
+    @model_validator(mode="after")
+    def references(self) -> Self:
+        source_ids = [e.evidence_id for e in self.sources]
+        segment_ids = [s.segment_id for s in self.segments]
+        names = [s.name.casefold().strip() for s in self.segments]
+        contexts = [s.use_context.casefold().strip() for s in self.segments]
+        if len(source_ids) != len(set(source_ids)) or len(segment_ids) != len(set(segment_ids)):
+            raise ValueError("Duplicate source or segment IDs")
+        if len(names) != len(set(names)):
+            raise ValueError("Segments must have distinct names")
+        if len(contexts) != len(set(contexts)):
+            raise ValueError("Segments must describe distinct use contexts")
+        required = {key for s in self.segments for key in [*s.evidence_ids, *s.counterevidence_ids]}
+        required.update(key for e in self.sources for key in e.supporting_evidence_ids)
+        if required - set(source_ids):
+            raise ValueError(f"Unknown starter evidence IDs: {sorted(required - set(source_ids))}")
+        return self
+
+
+class StarterProfile(Versioned):
+    profile_id: Identifier
+    profile_version: str
+    merchant_id: Identifier
+    built_at: datetime
+    mode: Literal["starter"] = "starter"
+    status: Literal["hypotheses_unvalidated"] = "hypotheses_unvalidated"
+    sales_history_used: Literal[False] = False
+    brief: NicheBrief
+    research: StarterResearch
+    missing_evidence: list[str]
+    limitations: list[str]
+
+    @model_validator(mode="after")
+    def matching_brief(self) -> Self:
+        if (
+            self.brief.merchant_id != self.merchant_id
+            or self.research.brief_id != self.brief.brief_id
+        ):
+            raise ValueError("Starter profile identity does not match brief")
+        if len(self.research.segments) != self.brief.segment_count:
+            raise ValueError("Segment count differs from requested count")
+        return self
 
 
 class Feedback(Versioned):

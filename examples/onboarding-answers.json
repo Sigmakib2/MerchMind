@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "merchant_id": "new-desk-store",
+  "business_name": "My Desk Store",
+  "market_country": "BD",
+  "base_currency": "BDT",
+  "source_countries": ["CN"],
+  "niche": "lightweight desk accessories",
+  "description": "Explore useful compact accessories for home desks without heavy equipment.",
+  "audience_context": ["People working at home"],
+  "product_constraints": ["No heavy machinery"],
+  "sourcing_hosts": ["example.com"],
+  "max_product_mass_g": "400",
+  "freight_rate_per_gram": null,
+  "startup_budget_local": null,
+  "merchant_vat_treatment": "unknown"
+}

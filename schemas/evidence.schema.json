@@ -20,7 +20,8 @@
         "marketplace_listing",
         "independent_review",
         "government",
-        "inference"
+        "inference",
+        "web_search_result"
       ],
       "title": "Source Type",
       "type": "string"

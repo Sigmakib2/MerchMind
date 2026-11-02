@@ -1,0 +1,775 @@
+{
+  "$defs": {
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "evidence_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "source_type": {
+          "enum": [
+            "merchant_record",
+            "manufacturer",
+            "supplier_quote",
+            "marketplace_listing",
+            "independent_review",
+            "government",
+            "inference",
+            "web_search_result"
+          ],
+          "title": "Source Type",
+          "type": "string"
+        },
+        "source_uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Uri"
+        },
+        "source_record_ref": {
+          "title": "Source Record Ref",
+          "type": "string"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "assertion": {
+          "title": "Assertion",
+          "type": "string"
+        },
+        "captured_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Captured Value"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "enum": [
+                "AED",
+                "AFN",
+                "ALL",
+                "AMD",
+                "AOA",
+                "ARS",
+                "AUD",
+                "AWG",
+                "AZN",
+                "BAM",
+                "BBD",
+                "BDT",
+                "BGN",
+                "BHD",
+                "BIF",
+                "BMD",
+                "BND",
+                "BOB",
+                "BRL",
+                "BSD",
+                "BTN",
+                "BWP",
+                "BYN",
+                "BZD",
+                "CAD",
+                "CDF",
+                "CHF",
+                "CLP",
+                "CNY",
+                "COP",
+                "CRC",
+                "CUP",
+                "CVE",
+                "CZK",
+                "DJF",
+                "DKK",
+                "DOP",
+                "DZD",
+                "EGP",
+                "ERN",
+                "ETB",
+                "EUR",
+                "FJD",
+                "FKP",
+                "GBP",
+                "GEL",
+                "GHS",
+                "GIP",
+                "GMD",
+                "GNF",
+                "GTQ",
+                "GYD",
+                "HKD",
+                "HNL",
+                "HTG",
+                "HUF",
+                "IDR",
+                "ILS",
+                "INR",
+                "IQD",
+                "IRR",
+                "ISK",
+                "JMD",
+                "JOD",
+                "JPY",
+                "KES",
+                "KGS",
+                "KHR",
+                "KMF",
+                "KPW",
+                "KRW",
+                "KWD",
+                "KYD",
+                "KZT",
+                "LAK",
+                "LBP",
+                "LKR",
+                "LRD",
+                "LSL",
+                "LYD",
+                "MAD",
+                "MDL",
+                "MGA",
+                "MKD",
+                "MMK",
+                "MNT",
+                "MOP",
+                "MRU",
+                "MUR",
+                "MVR",
+                "MWK",
+                "MXN",
+                "MYR",
+                "MZN",
+                "NAD",
+                "NGN",
+                "NIO",
+                "NOK",
+                "NPR",
+                "NZD",
+                "OMR",
+                "PAB",
+                "PEN",
+                "PGK",
+                "PHP",
+                "PKR",
+                "PLN",
+                "PYG",
+                "QAR",
+                "RON",
+                "RSD",
+                "RUB",
+                "RWF",
+                "SAR",
+                "SBD",
+                "SCR",
+                "SDG",
+                "SEK",
+                "SGD",
+                "SHP",
+                "SLE",
+                "SOS",
+                "SRD",
+                "SSP",
+                "STN",
+                "SVC",
+                "SYP",
+                "SZL",
+                "THB",
+                "TJS",
+                "TMT",
+                "TND",
+                "TOP",
+                "TRY",
+                "TTD",
+                "TWD",
+                "TZS",
+                "UAH",
+                "UGX",
+                "USD",
+                "UYU",
+                "UZS",
+                "VED",
+                "VES",
+                "VND",
+                "VUV",
+                "WST",
+                "XAF",
+                "XCD",
+                "XOF",
+                "XPF",
+                "YER",
+                "ZAR",
+                "ZMW",
+                "ZWG"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "verification_status": {
+          "enum": [
+            "merchant_provided",
+            "unverified",
+            "verified",
+            "inferred"
+          ],
+          "title": "Verification Status",
+          "type": "string"
+        },
+        "freshness_status": {
+          "default": "unknown",
+          "enum": [
+            "current",
+            "stale",
+            "unknown"
+          ],
+          "title": "Freshness Status",
+          "type": "string"
+        },
+        "hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Hash",
+          "type": "string"
+        },
+        "supporting_evidence_ids": {
+          "items": {
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Supporting Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "source_type",
+        "source_record_ref",
+        "retrieved_at",
+        "assertion",
+        "verification_status",
+        "hash"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "NicheBrief": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "brief_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Brief Id",
+          "type": "string"
+        },
+        "merchant_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Merchant Id",
+          "type": "string"
+        },
+        "niche": {
+          "maxLength": 200,
+          "minLength": 3,
+          "title": "Niche",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Description",
+          "type": "string"
+        },
+        "market_country": {
+          "title": "Market Country",
+          "type": "string"
+        },
+        "audience_context": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Audience Context",
+          "type": "array"
+        },
+        "product_constraints": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Product Constraints",
+          "type": "array"
+        },
+        "sourcing_hosts": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Sourcing Hosts",
+          "type": "array"
+        },
+        "research_languages": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Research Languages",
+          "type": "array"
+        },
+        "segment_count": {
+          "default": 4,
+          "enum": [
+            3,
+            4
+          ],
+          "title": "Segment Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "brief_id",
+        "merchant_id",
+        "niche",
+        "description",
+        "market_country"
+      ],
+      "title": "NicheBrief",
+      "type": "object"
+    },
+    "ResearchConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "search_provider": {
+          "const": "brave",
+          "default": "brave",
+          "title": "Search Provider",
+          "type": "string"
+        },
+        "synthesis_provider": {
+          "const": "deepseek",
+          "default": "deepseek",
+          "title": "Synthesis Provider",
+          "type": "string"
+        },
+        "model": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Model",
+          "type": "string"
+        },
+        "search_key_env": {
+          "default": "BRAVE_SEARCH_API_KEY",
+          "pattern": "^[A-Z][A-Z0-9_]{0,79}$",
+          "title": "Search Key Env",
+          "type": "string"
+        },
+        "model_key_env": {
+          "default": "DEEPSEEK_API_KEY",
+          "pattern": "^[A-Z][A-Z0-9_]{0,79}$",
+          "title": "Model Key Env",
+          "type": "string"
+        },
+        "research_hosts": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Research Hosts",
+          "type": "array"
+        },
+        "max_search_queries": {
+          "default": 4,
+          "maximum": 8,
+          "minimum": 1,
+          "title": "Max Search Queries",
+          "type": "integer"
+        },
+        "results_per_query": {
+          "default": 5,
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Results Per Query",
+          "type": "integer"
+        },
+        "max_input_characters": {
+          "default": 20000,
+          "maximum": 50000,
+          "minimum": 2000,
+          "title": "Max Input Characters",
+          "type": "integer"
+        },
+        "max_output_tokens": {
+          "default": 4096,
+          "maximum": 8192,
+          "minimum": 512,
+          "title": "Max Output Tokens",
+          "type": "integer"
+        },
+        "search_price_per_request_usd": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Search Price Per Request Usd"
+        },
+        "model_input_price_per_million_usd": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Input Price Per Million Usd"
+        },
+        "model_output_price_per_million_usd": {
+          "anyOf": [
+            {
+              "ge": 0,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Output Price Per Million Usd"
+        },
+        "max_estimated_cost_usd": {
+          "gt": 0,
+          "title": "Max Estimated Cost Usd",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model",
+        "research_hosts",
+        "max_estimated_cost_usd"
+      ],
+      "title": "ResearchConnection",
+      "type": "object"
+    },
+    "SegmentHypothesis": {
+      "additionalProperties": false,
+      "properties": {
+        "segment_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Segment Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 150,
+          "minLength": 3,
+          "title": "Name",
+          "type": "string"
+        },
+        "use_context": {
+          "maxLength": 1000,
+          "minLength": 10,
+          "title": "Use Context",
+          "type": "string"
+        },
+        "possible_goals": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Possible Goals",
+          "type": "array"
+        },
+        "possible_buying_triggers": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Possible Buying Triggers",
+          "type": "array"
+        },
+        "possible_objections": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Possible Objections",
+          "type": "array"
+        },
+        "product_search_terms": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Product Search Terms",
+          "type": "array"
+        },
+        "validation_questions": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "minItems": 1,
+          "title": "Validation Questions",
+          "type": "array"
+        },
+        "kind": {
+          "default": "merchant_hypothesis",
+          "enum": [
+            "merchant_hypothesis",
+            "research_inference"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "confidence": {
+          "default": "low",
+          "enum": [
+            "low",
+            "medium"
+          ],
+          "title": "Confidence",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "counterevidence_ids": {
+          "items": {
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+            "type": "string"
+          },
+          "title": "Counterevidence Ids",
+          "type": "array"
+        },
+        "status": {
+          "const": "unvalidated",
+          "default": "unvalidated",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "segment_id",
+        "name",
+        "use_context",
+        "possible_goals",
+        "possible_buying_triggers",
+        "possible_objections",
+        "product_search_terms",
+        "validation_questions"
+      ],
+      "title": "SegmentHypothesis",
+      "type": "object"
+    },
+    "StarterResearch": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "brief_id": {
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+          "title": "Brief Id",
+          "type": "string"
+        },
+        "segments": {
+          "items": {
+            "$ref": "#/$defs/SegmentHypothesis"
+          },
+          "maxItems": 4,
+          "minItems": 3,
+          "title": "Segments",
+          "type": "array"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "maxItems": 100,
+          "title": "Sources",
+          "type": "array"
+        }
+      },
+      "required": [
+        "brief_id",
+        "segments"
+      ],
+      "title": "StarterResearch",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "engine_version": {
+      "default": "0.1.0",
+      "title": "Engine Version",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "brief_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Brief Id",
+      "type": "string"
+    },
+    "run_at": {
+      "format": "date-time",
+      "title": "Run At",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "complete",
+        "partial"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "research": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StarterResearch"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Sources",
+      "type": "array"
+    },
+    "requests": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Requests",
+      "type": "array"
+    },
+    "configured_cost_upper_estimate_usd": {
+      "ge": 0,
+      "title": "Configured Cost Upper Estimate Usd",
+      "type": "string"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    },
+    "connection_snapshot": {
+      "$ref": "#/$defs/ResearchConnection"
+    },
+    "brief_snapshot": {
+      "$ref": "#/$defs/NicheBrief"
+    },
+    "model_usage": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Model Usage",
+      "type": "object"
+    }
+  },
+  "required": [
+    "run_id",
+    "brief_id",
+    "run_at",
+    "status",
+    "research",
+    "sources",
+    "requests",
+    "configured_cost_upper_estimate_usd",
+    "warnings",
+    "connection_snapshot",
+    "brief_snapshot"
+  ],
+  "title": "ConnectedResearchResult",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/connected-research.schema.json"
+}

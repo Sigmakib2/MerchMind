@@ -26,6 +26,8 @@ def estimate(cost: CostInput, merchant: Merchant, *, at: datetime | None = None)
     for scenario in cost.scenarios:
         evidence_ids.update(scenario.tax_evidence_ids)
         missing = []
+        if merchant.freight.rate is None:
+            missing.append("freight rate")
         if not fx_valid:
             missing.append("current dated exchange rate")
         taxes_confirmed = scenario.tax_inputs_confirmed and bool(scenario.tax_evidence_ids)
@@ -61,9 +63,13 @@ def estimate(cost: CostInput, merchant: Merchant, *, at: datetime | None = None)
                         scenario.mass_g + scenario.packaging_mass_g,
                         scenario.volumetric_mass_g or Decimal("0"),
                     )
-                    freight = max(weight * merchant.freight.rate, merchant.freight.minimum_charge)
+                    if merchant.freight.rate is not None:
+                        freight = max(
+                            weight * merchant.freight.rate, merchant.freight.minimum_charge
+                        )
             else:
-                freight = max(merchant.freight.rate, merchant.freight.minimum_charge)
+                if merchant.freight.rate is not None:
+                    freight = max(merchant.freight.rate, merchant.freight.minimum_charge)
             vat = None
             if (
                 scenario.import_vat is not None

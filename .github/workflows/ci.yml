@@ -25,6 +25,7 @@ jobs:
       - run: uv run pytest -q
       - run: uv run python scripts/check_skills.py
       - run: uv run merchmind demo --workspace workspaces/ci-demo
+      - run: uv run merchmind demo --mode journey --workspace workspaces/ci-journey
 
   package:
     runs-on: ubuntu-latest
@@ -38,3 +39,4 @@ jobs:
       - run: uv venv .tmp/package-venv
       - run: uv pip install --python .tmp/package-venv/bin/python dist/*.whl
       - run: .tmp/package-venv/bin/python -I -m merchmind demo --workspace workspaces/package-demo
+      - run: .tmp/package-venv/bin/python -I -m merchmind demo --mode journey --workspace workspaces/package-journey

@@ -68,6 +68,26 @@ To run the demo again, choose another folder, such as `workspaces/demo-2`. Merch
 
 A high score does not guarantee sales. Missing costs stay unknown; they are never silently counted as zero.
 
+## Starting without existing customers?
+
+For guided setup, optional connected research, product comparison, customer feedback and launch costs, see the [merchant journey guide](docs/merchant-journey.md). Try all five stages offline:
+
+```sh
+uv run merchmind demo --mode journey --workspace workspaces/my-journey-demo
+```
+
+For your own business, run `uv run merchmind onboard --workspace workspaces/my-store` and answer the questions. No sales history is required.
+
+Use **starter mode** to explore a niche before you have sales history:
+
+```sh
+uv run merchmind demo --mode starter --workspace workspaces/fitness-starter
+```
+
+It creates three or four possible customer profiles, questions to research, and product-search directions for approved sourcing sites. The demo uses lightweight home fitness as an example. These are unvalidated hypotheses: the offline demo does not search the web or claim to know what real buyers want.
+
+You can describe your own niche and add a source-backed synthesis from a merchant or external research agent. Read the [starter-mode guide](docs/starter-mode.md) for the full workflow and current limits.
+
 ## Use your own business data
 
 Start with a separate workspace:
@@ -100,18 +120,22 @@ Run `uv run merchmind --help` to see the available commands. Add `--help` after 
 
 - Import CSV or JSON catalogs, sales, returns and supplier quotes.
 - Build customer profiles from aggregate sales observations.
+- Explore a new niche without sales history through distinct starter hypotheses and guided sourcing plans.
+- Set up a business through guided questions and optionally connect Brave search with DeepSeek synthesis.
+- Compare evidenced product attributes with customer hypotheses and track real validation observations.
+- Estimate total launch cash using minimum quantities, applicable price tiers and upfront costs.
 - Calculate shipping, landed cost and contribution across three scenarios.
 - Score opportunities with visible evidence coverage and decision rules.
 - Save reports, preserve their inputs and check that calculations can be reproduced.
 - Provide six research skills for an external agent runtime, including DeepSeek Harness (DSH).
 
-Research runs offline by default. An explicit `--online` option enables limited, read-only retrieval from approved websites. The built-in web adapter records an unverified page title and receipt hash; reviewed imports supply prices and supplier facts. It does not provide automatic marketplace search or verified price extraction. See the [source policy](docs/connector-policy.md).
+Research runs offline by default. An explicit `--online` option enables limited, read-only retrieval from approved websites. The generic page adapter records an unverified title and receipt hash. Optional connected research uses approved search results and model synthesis with configured accounts, budgets and `--share-brief` consent. Reviewed imports supply prices and supplier facts; automatic verified marketplace-price extraction is not implemented. See the [source policy](docs/connector-policy.md) and [merchant journey guide](docs/merchant-journey.md).
 
 MerchMind does not place orders, send supplier messages, make payments or bypass login and CAPTCHA restrictions. Alibaba and 1688 do not yet have dedicated connectors. Live DSH skill loading and a real-store pilot remain release checks; local skill checks do not establish runtime compatibility.
 
 ## Keep business data private
 
-Workspaces, generated reports and environment files are ignored by Git. Data stays local; there is no automatic cloud upload. Imports reject unsupported fields such as customer email or phone columns. Remove personal information and credentials from your own notes and source records before importing them.
+Workspaces, generated reports and environment files are ignored by Git. Default workflows keep data local. Optional connected research sends the niche brief and public snippets only after explicit sharing consent; merchant financial files and validation records are not inserted into provider prompts. Imports reject unsupported fields such as customer email or phone columns. Remove personal information and credentials from your own notes and source records before importing them.
 
 See the [security policy](SECURITY.md) for reporting vulnerabilities and the [threat model](docs/threat-model.md) for current controls and limits.
 

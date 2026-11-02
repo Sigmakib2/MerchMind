@@ -42,6 +42,8 @@ def test_unsafe_source_urls_rejected(url):
         "::1",
         "fc00::1",
         "::ffff:127.0.0.1",
+        "224.0.0.1",
+        "ff02::1",
     ],
 )
 def test_private_dns_rejected(address):

@@ -1,0 +1,90 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "brief_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Brief Id",
+      "type": "string"
+    },
+    "merchant_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Merchant Id",
+      "type": "string"
+    },
+    "niche": {
+      "maxLength": 200,
+      "minLength": 3,
+      "title": "Niche",
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 2000,
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "market_country": {
+      "title": "Market Country",
+      "type": "string"
+    },
+    "audience_context": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 20,
+      "title": "Audience Context",
+      "type": "array"
+    },
+    "product_constraints": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 20,
+      "title": "Product Constraints",
+      "type": "array"
+    },
+    "sourcing_hosts": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 20,
+      "title": "Sourcing Hosts",
+      "type": "array"
+    },
+    "research_languages": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 5,
+      "minItems": 1,
+      "title": "Research Languages",
+      "type": "array"
+    },
+    "segment_count": {
+      "default": 4,
+      "enum": [
+        3,
+        4
+      ],
+      "title": "Segment Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "brief_id",
+    "merchant_id",
+    "niche",
+    "description",
+    "market_country"
+  ],
+  "title": "NicheBrief",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/niche-brief.schema.json"
+}

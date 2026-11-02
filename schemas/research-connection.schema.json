@@ -1,0 +1,131 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "search_provider": {
+      "const": "brave",
+      "default": "brave",
+      "title": "Search Provider",
+      "type": "string"
+    },
+    "synthesis_provider": {
+      "const": "deepseek",
+      "default": "deepseek",
+      "title": "Synthesis Provider",
+      "type": "string"
+    },
+    "model": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Model",
+      "type": "string"
+    },
+    "search_key_env": {
+      "default": "BRAVE_SEARCH_API_KEY",
+      "pattern": "^[A-Z][A-Z0-9_]{0,79}$",
+      "title": "Search Key Env",
+      "type": "string"
+    },
+    "model_key_env": {
+      "default": "DEEPSEEK_API_KEY",
+      "pattern": "^[A-Z][A-Z0-9_]{0,79}$",
+      "title": "Model Key Env",
+      "type": "string"
+    },
+    "research_hosts": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "title": "Research Hosts",
+      "type": "array"
+    },
+    "max_search_queries": {
+      "default": 4,
+      "maximum": 8,
+      "minimum": 1,
+      "title": "Max Search Queries",
+      "type": "integer"
+    },
+    "results_per_query": {
+      "default": 5,
+      "maximum": 10,
+      "minimum": 1,
+      "title": "Results Per Query",
+      "type": "integer"
+    },
+    "max_input_characters": {
+      "default": 20000,
+      "maximum": 50000,
+      "minimum": 2000,
+      "title": "Max Input Characters",
+      "type": "integer"
+    },
+    "max_output_tokens": {
+      "default": 4096,
+      "maximum": 8192,
+      "minimum": 512,
+      "title": "Max Output Tokens",
+      "type": "integer"
+    },
+    "search_price_per_request_usd": {
+      "anyOf": [
+        {
+          "ge": 0,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Search Price Per Request Usd"
+    },
+    "model_input_price_per_million_usd": {
+      "anyOf": [
+        {
+          "ge": 0,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Input Price Per Million Usd"
+    },
+    "model_output_price_per_million_usd": {
+      "anyOf": [
+        {
+          "ge": 0,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Output Price Per Million Usd"
+    },
+    "max_estimated_cost_usd": {
+      "gt": 0,
+      "title": "Max Estimated Cost Usd",
+      "type": "string"
+    }
+  },
+  "required": [
+    "model",
+    "research_hosts",
+    "max_estimated_cost_usd"
+  ],
+  "title": "ResearchConnection",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/research-connection.schema.json"
+}

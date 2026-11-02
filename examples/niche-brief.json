@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "brief_id": "home-fitness-demo",
+  "merchant_id": "cozy-vibe-demo",
+  "niche": "lightweight home fitness accessories",
+  "description": "Explore compact accessories for people considering exercise at home or on the go. Exclude heavy machinery and medical treatment claims.",
+  "market_country": "BD",
+  "audience_context": ["People considering workouts at home", "People looking for portable workout accessories"],
+  "product_constraints": ["No heavy machinery", "No medical treatment claims"],
+  "sourcing_hosts": ["example.com"],
+  "research_languages": ["English", "Bangla"],
+  "segment_count": 4
+}

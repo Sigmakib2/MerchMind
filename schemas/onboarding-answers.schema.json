@@ -1,0 +1,303 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "merchant_id": {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$",
+      "title": "Merchant Id",
+      "type": "string"
+    },
+    "business_name": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Business Name",
+      "type": "string"
+    },
+    "market_country": {
+      "title": "Market Country",
+      "type": "string"
+    },
+    "base_currency": {
+      "enum": [
+        "AED",
+        "AFN",
+        "ALL",
+        "AMD",
+        "AOA",
+        "ARS",
+        "AUD",
+        "AWG",
+        "AZN",
+        "BAM",
+        "BBD",
+        "BDT",
+        "BGN",
+        "BHD",
+        "BIF",
+        "BMD",
+        "BND",
+        "BOB",
+        "BRL",
+        "BSD",
+        "BTN",
+        "BWP",
+        "BYN",
+        "BZD",
+        "CAD",
+        "CDF",
+        "CHF",
+        "CLP",
+        "CNY",
+        "COP",
+        "CRC",
+        "CUP",
+        "CVE",
+        "CZK",
+        "DJF",
+        "DKK",
+        "DOP",
+        "DZD",
+        "EGP",
+        "ERN",
+        "ETB",
+        "EUR",
+        "FJD",
+        "FKP",
+        "GBP",
+        "GEL",
+        "GHS",
+        "GIP",
+        "GMD",
+        "GNF",
+        "GTQ",
+        "GYD",
+        "HKD",
+        "HNL",
+        "HTG",
+        "HUF",
+        "IDR",
+        "ILS",
+        "INR",
+        "IQD",
+        "IRR",
+        "ISK",
+        "JMD",
+        "JOD",
+        "JPY",
+        "KES",
+        "KGS",
+        "KHR",
+        "KMF",
+        "KPW",
+        "KRW",
+        "KWD",
+        "KYD",
+        "KZT",
+        "LAK",
+        "LBP",
+        "LKR",
+        "LRD",
+        "LSL",
+        "LYD",
+        "MAD",
+        "MDL",
+        "MGA",
+        "MKD",
+        "MMK",
+        "MNT",
+        "MOP",
+        "MRU",
+        "MUR",
+        "MVR",
+        "MWK",
+        "MXN",
+        "MYR",
+        "MZN",
+        "NAD",
+        "NGN",
+        "NIO",
+        "NOK",
+        "NPR",
+        "NZD",
+        "OMR",
+        "PAB",
+        "PEN",
+        "PGK",
+        "PHP",
+        "PKR",
+        "PLN",
+        "PYG",
+        "QAR",
+        "RON",
+        "RSD",
+        "RUB",
+        "RWF",
+        "SAR",
+        "SBD",
+        "SCR",
+        "SDG",
+        "SEK",
+        "SGD",
+        "SHP",
+        "SLE",
+        "SOS",
+        "SRD",
+        "SSP",
+        "STN",
+        "SVC",
+        "SYP",
+        "SZL",
+        "THB",
+        "TJS",
+        "TMT",
+        "TND",
+        "TOP",
+        "TRY",
+        "TTD",
+        "TWD",
+        "TZS",
+        "UAH",
+        "UGX",
+        "USD",
+        "UYU",
+        "UZS",
+        "VED",
+        "VES",
+        "VND",
+        "VUV",
+        "WST",
+        "XAF",
+        "XCD",
+        "XOF",
+        "XPF",
+        "YER",
+        "ZAR",
+        "ZMW",
+        "ZWG"
+      ],
+      "title": "Base Currency",
+      "type": "string"
+    },
+    "source_countries": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Source Countries",
+      "type": "array"
+    },
+    "niche": {
+      "maxLength": 200,
+      "minLength": 3,
+      "title": "Niche",
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 2000,
+      "minLength": 10,
+      "title": "Description",
+      "type": "string"
+    },
+    "audience_context": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Audience Context",
+      "type": "array"
+    },
+    "product_constraints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Product Constraints",
+      "type": "array"
+    },
+    "excluded_categories": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Excluded Categories",
+      "type": "array"
+    },
+    "sourcing_hosts": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Sourcing Hosts",
+      "type": "array"
+    },
+    "research_languages": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Research Languages",
+      "type": "array"
+    },
+    "max_product_mass_g": {
+      "gt": 0,
+      "title": "Max Product Mass G",
+      "type": "string"
+    },
+    "target_contribution_margin": {
+      "default": "0.30",
+      "ge": 0,
+      "le": 1,
+      "title": "Target Contribution Margin",
+      "type": "string"
+    },
+    "freight_rate_per_gram": {
+      "anyOf": [
+        {
+          "ge": 0,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Freight Rate Per Gram"
+    },
+    "startup_budget_local": {
+      "anyOf": [
+        {
+          "gt": 0,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Startup Budget Local"
+    },
+    "merchant_vat_treatment": {
+      "default": "unknown",
+      "enum": [
+        "recoverable",
+        "expense",
+        "unknown"
+      ],
+      "title": "Merchant Vat Treatment",
+      "type": "string"
+    }
+  },
+  "required": [
+    "merchant_id",
+    "business_name",
+    "market_country",
+    "base_currency",
+    "niche",
+    "description",
+    "max_product_mass_g"
+  ],
+  "title": "OnboardingAnswers",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://merchmind.example/schemas/1.0/onboarding-answers.schema.json"
+}

@@ -9,23 +9,51 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from merchmind import __version__
+from merchmind.comparison import compare_products, comparison_markdown
+from merchmind.connected import connect_research
 from merchmind.demo import data
 from merchmind.demo import merchant as demo_merchant
 from merchmind.economics import estimate
 from merchmind.intelligence import build_profile, import_records
+from merchmind.journey_demo import run_journey_demo
+from merchmind.journey_models import (
+    ComparisonInput,
+    LaunchInput,
+    OnboardingAnswers,
+    ResearchConnection,
+    ValidationEvent,
+)
+from merchmind.journey_storage import save_artifact
+from merchmind.launch import estimate_launch, launch_markdown
 from merchmind.models import (
     CostInput,
     Feedback,
     Merchant,
+    NicheBrief,
     Report,
     ResearchPolicy,
     ResearchRequest,
     ScoringConfig,
+    StarterProfile,
+    StarterResearch,
 )
+from merchmind.onboarding import onboard, prompt_answers
 from merchmind.reports import markdown, save_report
 from merchmind.research import load_research_bundle, prepare, run
 from merchmind.sourcing import import_quotes
+from merchmind.starter import (
+    build_starter_profile,
+    discovery_plan,
+    research_plan,
+    save_starter_profile,
+)
 from merchmind.storage import append_log, load, private_path, redact, write
+from merchmind.validation import (
+    add_observation,
+    summarize_validation,
+    validation_markdown,
+    validation_plan,
+)
 
 
 def parser() -> argparse.ArgumentParser:
@@ -34,6 +62,37 @@ def parser() -> argparse.ArgumentParser:
     )
     root.add_argument("--version", action="version", version=__version__)
     commands = root.add_subparsers(dest="command", required=True)
+    launch = (
+        commands.add_parser("launch", help="Estimate total startup cash")
+        .add_subparsers(dest="action", required=True)
+        .add_parser("estimate")
+    )
+    launch.add_argument("--workspace", type=Path, required=True)
+    launch.add_argument("--input", type=Path, required=True)
+    validation = commands.add_parser(
+        "validation", help="Plan and record real customer observations"
+    ).add_subparsers(dest="action", required=True)
+    for name in ("plan", "add", "summary"):
+        action = validation.add_parser(name)
+        action.add_argument("--workspace", type=Path, required=True)
+        action.add_argument("--profile", type=Path, required=True)
+        if name == "add":
+            action.add_argument("--input", type=Path, required=True)
+    compare = commands.add_parser(
+        "compare", help="Compare product attributes with customer hypotheses"
+    )
+    compare.add_argument("--workspace", type=Path, required=True)
+    compare.add_argument("--profile", type=Path, required=True)
+    compare.add_argument("--input", type=Path, required=True)
+    onboarding = commands.add_parser(
+        "onboard", help="Answer simple questions to configure a new business"
+    )
+    onboarding.add_argument("--workspace", type=Path, required=True)
+    onboarding.add_argument(
+        "--answers",
+        type=Path,
+        help="Optional OnboardingAnswers JSON instead of interactive questions",
+    )
     init = commands.add_parser("init", help="Initialize a private demo-configured workspace")
     init.add_argument("--workspace", type=Path, required=True)
     init.add_argument("--template", choices=["demo"], default="demo")
@@ -46,6 +105,29 @@ def parser() -> argparse.ArgumentParser:
     profile = commands.add_parser("profile").add_subparsers(dest="action", required=True)
     profile_build = profile.add_parser("build")
     profile_build.add_argument("--workspace", type=Path, required=True)
+    starter = profile.add_parser("starter", help="Start from a niche without sales history")
+    starter_actions = starter.add_subparsers(dest="starter_action", required=True)
+    for name in ("prepare", "build", "discover", "research"):
+        action = starter_actions.add_parser(name)
+        action.add_argument("--workspace", type=Path, required=True)
+        if name == "discover":
+            action.add_argument("--profile", type=Path, required=True)
+        else:
+            action.add_argument("--brief", type=Path, required=True)
+        if name == "build":
+            action.add_argument(
+                "--research",
+                type=Path,
+                help="Reviewed StarterResearch JSON; omitted input produces unresearched draft seeds",
+            )
+        if name == "research":
+            action.add_argument("--connection", type=Path, required=True)
+            action.add_argument("--online", action="store_true")
+            action.add_argument(
+                "--share-brief",
+                action="store_true",
+                help="Permit sending only the niche brief and public snippets to providers",
+            )
     cost = (
         commands.add_parser("cost")
         .add_subparsers(dest="action", required=True)
@@ -78,6 +160,7 @@ def parser() -> argparse.ArgumentParser:
     render.add_argument("--output", type=Path, required=True)
     demo = commands.add_parser("demo", help="Complete offline synthetic workflow")
     demo.add_argument("--workspace", type=Path, required=True)
+    demo.add_argument("--mode", choices=["sales", "starter", "journey"], default="sales")
     feedback = (
         commands.add_parser("feedback")
         .add_subparsers(dest="action", required=True)
@@ -105,7 +188,7 @@ def initialize(workspace: Path) -> list[Path]:
                 "status": "demo_only",
                 "missing": [
                     "Replace synthetic business assumptions",
-                    "Import a product catalog and sales history",
+                    "Build starter hypotheses from a niche brief, or import a catalog and sales history",
                     "Supply current verified FX and tax amounts",
                 ],
             },
@@ -144,9 +227,54 @@ def execute(args: argparse.Namespace) -> dict:
     result = None
     warnings = []
     run_id = None
-    if args.command == "init":
+    if args.command == "onboard":
+        answers = (
+            OnboardingAnswers.model_validate(load(args.answers))
+            if args.answers
+            else prompt_answers()
+        )
+        paths, warnings = onboard(answers, args.workspace)
+        result = {
+            "merchant_id": answers.merchant_id,
+            "next_command": "profile starter prepare",
+            "configuration_source": "merchant_answers",
+        }
+    elif args.command == "init":
         paths = initialize(args.workspace)
         warnings = ["Synthetic demo defaults. Review merchant.yaml before real research."]
+    elif args.command == "demo" and args.mode == "journey":
+        paths, result = run_journey_demo(args.workspace)
+        warnings = [
+            "Entire five-stage journey is synthetic. Connected research uses a local recording, makes no network requests and consumes no paid tokens."
+        ]
+    elif args.command == "demo" and args.mode == "starter":
+        paths = initialize(args.workspace)
+        brief = NicheBrief(
+            brief_id="home-fitness-demo",
+            merchant_id="cozy-vibe-demo",
+            niche="lightweight home fitness accessories",
+            description="Explore compact accessories for people considering exercise at home or on the go. Exclude heavy machinery and medical claims.",
+            market_country="BD",
+            audience_context=["People considering home workouts"],
+            product_constraints=["No heavy machines", "No medical treatment claims"],
+            sourcing_hosts=["example.com"],
+            research_languages=["English", "Bangla"],
+        )
+        paths.append(write(private_path(args.workspace, "demo-inputs/niche-brief.json"), brief))
+        merchant = get_merchant(args.workspace)
+        policy = get_research_policy(args.workspace)
+        profile = build_starter_profile(brief, merchant, policy)
+        paths.extend(save_starter_profile(profile, merchant, args.workspace, policy))
+        result = {
+            "mode": "starter",
+            "segments": len(profile.research.segments),
+            "status": profile.status,
+            "sales_history_used": False,
+            "synthetic": True,
+        }
+        warnings = [
+            "Unresearched hypothetical customer groups, not Bangladesh market findings. No web search or product sourcing was performed."
+        ]
     elif args.command == "demo":
         paths = initialize(args.workspace)
         fixture = data()
@@ -215,6 +343,63 @@ def execute(args: argparse.Namespace) -> dict:
                 "research_policy": research_policy.model_dump(mode="json"),
                 "configuration_valid": True,
             }
+        elif args.command == "launch":
+            launch_report = estimate_launch(LaunchInput.model_validate(load(args.input)), merchant)
+            paths = save_artifact(
+                launch_report,
+                "launch-budget",
+                launch_markdown(launch_report),
+                args.workspace,
+                research_policy,
+            )
+            result = {
+                "order_quantity": launch_report.order_quantity,
+                "scenarios": [
+                    {
+                        "name": s.name,
+                        "required_cash": str(s.required_cash)
+                        if s.required_cash is not None
+                        else None,
+                        "budget_status": s.budget_status,
+                    }
+                    for s in launch_report.scenarios
+                ],
+            }
+        elif args.command == "validation":
+            profile = StarterProfile.model_validate(load(args.profile))
+            if args.action == "plan":
+                result = validation_plan(profile, merchant)
+            elif args.action == "add":
+                event = ValidationEvent.model_validate(load(args.input))
+                paths = [add_observation(event, profile, merchant, args.workspace, research_policy)]
+                result = {"event_id": event.event_id, "original_profile_changed": False}
+            else:
+                summary = summarize_validation(profile, merchant, args.workspace, research_policy)
+                paths = save_artifact(
+                    summary,
+                    "validation-summary",
+                    validation_markdown(summary),
+                    args.workspace,
+                    research_policy,
+                )
+                result = {
+                    "hypotheses": len(summary.findings),
+                    "recorded_events": len(summary.records),
+                }
+        elif args.command == "compare":
+            comparison = compare_products(
+                ComparisonInput.model_validate(load(args.input)),
+                StarterProfile.model_validate(load(args.profile)),
+                merchant,
+            )
+            paths = save_artifact(
+                comparison,
+                "comparison",
+                comparison_markdown(comparison),
+                args.workspace,
+                research_policy,
+            )
+            result = {"comparisons": len(comparison.results), "basis": "unvalidated_hypotheses"}
         elif args.command == "import":
             if args.kind == "quotes":
                 quotes, sources = import_quotes(args.file)
@@ -230,7 +415,62 @@ def execute(args: argparse.Namespace) -> dict:
             else:
                 paths = import_records(args.kind, args.file, args.workspace, merchant)
         elif args.command == "profile":
-            paths = persist_profile(args.workspace, merchant)
+            if args.action == "build":
+                paths = persist_profile(args.workspace, merchant)
+            elif args.starter_action == "discover":
+                profile = StarterProfile.model_validate(load(args.profile))
+                result = discovery_plan(profile, merchant)
+            else:
+                brief = NicheBrief.model_validate(load(args.brief))
+                if args.starter_action == "prepare":
+                    result = research_plan(brief, merchant, research_policy)
+                elif args.starter_action == "research":
+                    connection = ResearchConnection.model_validate(load(args.connection))
+                    connected = connect_research(
+                        brief,
+                        merchant,
+                        research_policy,
+                        connection,
+                        online=args.online,
+                        share_brief=args.share_brief,
+                    )
+                    root = private_path(args.workspace, f"connected/{connected.run_id}")
+                    if (
+                        len(connected.model_dump_json(indent=2).encode())
+                        > research_policy.max_report_bytes
+                    ):
+                        raise ValueError("Connected research exceeds report storage budget")
+                    paths = [write(root / "connected-research.json", connected)]
+                    if connected.research is not None:
+                        paths.append(write(root / "research.json", connected.research))
+                        profile = build_starter_profile(
+                            brief, merchant, research_policy, connected.research
+                        )
+                        paths.extend(
+                            save_starter_profile(profile, merchant, args.workspace, research_policy)
+                        )
+                    result = {
+                        "status": connected.status,
+                        "source_count": len(connected.sources),
+                        "requests": len(connected.requests),
+                    }
+                    warnings = connected.warnings
+                    run_id = connected.run_id
+                else:
+                    research = (
+                        StarterResearch.model_validate(load(args.research))
+                        if args.research
+                        else None
+                    )
+                    profile = build_starter_profile(brief, merchant, research_policy, research)
+                    paths = save_starter_profile(profile, merchant, args.workspace, research_policy)
+                    result = {
+                        "mode": "starter",
+                        "segments": len(profile.research.segments),
+                        "status": profile.status,
+                        "sales_history_used": False,
+                    }
+                    warnings = profile.missing_evidence
         elif args.command == "cost":
             cost_input = CostInput.model_validate(load(args.input))
             result = estimate(cost_input, merchant).model_dump(mode="json")
@@ -286,7 +526,7 @@ def main(argv: list[str] | None = None) -> int:
             "artifact_paths": [],
             "run_id": None,
         }
-    except (ValueError, OSError, KeyError, TypeError) as exc:
+    except (ValueError, OSError, KeyError, TypeError, EOFError) as exc:
         result = {
             "status": "error",
             "errors": [redact(str(exc))],

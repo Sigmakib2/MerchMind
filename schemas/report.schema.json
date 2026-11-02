@@ -707,7 +707,8 @@
             "marketplace_listing",
             "independent_review",
             "government",
-            "inference"
+            "inference",
+            "web_search_result"
           ],
           "title": "Source Type",
           "type": "string"
@@ -1376,9 +1377,16 @@
           "type": "string"
         },
         "rate": {
-          "ge": 0,
-          "title": "Rate",
-          "type": "string"
+          "anyOf": [
+            {
+              "ge": 0,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Rate"
         },
         "currency": {
           "enum": [

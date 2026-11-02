@@ -1,5 +1,7 @@
 # GitHub readiness review
 
+This is a historical snapshot of the initial alpha, before the starter and merchant-journey additions. Consult current CI results and `docs/status.md` for the expanded implementation.
+
 Review date: 2026-11-01. Recommendation: share this repository as a **developer alpha**. The offline toolkit is working; the full product specification is not yet commercially validated.
 
 ## Problems corrected during review

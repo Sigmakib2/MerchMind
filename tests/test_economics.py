@@ -5,7 +5,8 @@ import pytest
 from pydantic import ValidationError
 
 from merchmind.economics import estimate
-from merchmind.models import CostInput, Merchant
+from merchmind.models import CostInput, Merchant, decimal_string
+from merchmind.reports import amount
 
 
 def test_independent_golden_costs(fixture):
@@ -147,3 +148,14 @@ def test_conflicting_mass_units_are_rejected(fixture):
     raw["scenarios"][0]["mass"] = {"value": "180", "unit": "kg"}
     with pytest.raises(ValidationError, match="conflicts"):
         CostInput.model_validate(raw)
+
+
+@pytest.mark.parametrize("value", ["1e1000000", "1e-1000000", "1" * 1025])
+def test_pathological_decimal_inputs_are_rejected_before_arithmetic(value):
+    with pytest.raises(ValueError, match="supported precision or exponent"):
+        decimal_string(value)
+
+
+def test_large_finite_amounts_render_without_default_context_precision_failure():
+    assert amount(Decimal("1e40")) == "1" + "0" * 40 + ".00"
+    assert amount(Decimal("-1e40")) == "-1" + "0" * 40 + ".00"

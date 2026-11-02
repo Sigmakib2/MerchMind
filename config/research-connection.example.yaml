@@ -1,0 +1,18 @@
+schema_version: "1.0"
+search_provider: brave
+synthesis_provider: deepseek
+model: deepseek-flash
+search_key_env: BRAVE_SEARCH_API_KEY
+model_key_env: DEEPSEEK_API_KEY
+# Replace these with the exact research domains you approve.
+research_hosts: [example.com]
+max_search_queries: 3
+results_per_query: 5
+max_input_characters: 20000
+max_output_tokens: 4096
+# Supply the current rates for your accounts before making requests.
+# Unknown prices block online execution; no rates are invented here.
+search_price_per_request_usd: null
+model_input_price_per_million_usd: null
+model_output_price_per_million_usd: null
+max_estimated_cost_usd: "1.00"

@@ -13,3 +13,15 @@ Use for sourcing economics. Read `schemas/cost-input.schema.json` and `docs/data
 6. Preserve the full input snapshot and evidence in the final research report. The conservative margin drives economic scoring and merchant hard gates.
 
 Tax classification/rates are merchant-reviewed inputs, not an automated customs database. Recoverable VAT is excluded from expense but still affects working capital. A scenario is an assumption, not a guaranteed outcome.
+
+
+## Total launch cash
+
+Use `merchmind launch estimate --workspace WORKSPACE --input INPUT` for startup cash planning. Follow `schemas/launch-input.schema.json` and `docs/merchant-journey.md`.
+
+- Supply order quantity, confirmed matching quote/tier, existing unit-cost scenarios and reviewed evidence. MOQ and quote-currency mismatches fail explicitly. Below-tier scenario prices cannot produce complete cash totals.
+- Enter samples, setup, initial ads, upfront selling costs, working-capital reserve and contingency explicitly. Unknown amounts are null, never zero by default.
+- Include all import VAT as upfront cash even when recoverable for expense accounting. Do not assume an immediate refund.
+- Count the initial advertising budget once. Do not also multiply per-sale marketing by inventory and charge it as the same upfront campaign.
+- Keep held reserve, expenses, launch cash and unit contribution distinct. Read the assumptions about sellable units, packaging, prepaid fees and allocation of fixed batch charges.
+- An estimated cash total or within-budget result does not authorize a purchase or guarantee sufficient capital. No payments, orders or supplier messages are available.

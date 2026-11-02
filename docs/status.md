@@ -6,7 +6,12 @@ The requirements document remains the product specification. This first implemen
 | --- | --- |
 | Foundation | Python package, uv lockfile, typed contracts, generated schemas, examples, local CLI and CI configured |
 | Merchant intelligence | CSV/JSON catalog, sales and returns imports; aggregate evidence-backed observations; versioned profiles |
-| Customer hypotheses | Explicit finding contract exists; automated hypothesis generation, counterevidence synthesis and adoption workflow remain future work |
+| Starter customer hypotheses | Niche briefs, research plans, three/four generic draft groups or source-backed research imports, confidence/counterevidence and guided sourcing queries; no sales history required |
+| Guided onboarding | Interactive questions or answer files create merchant configuration, niche brief, budget input and readiness checks without demo sales |
+| Connected starter research | Optional Brave + DeepSeek adapters, explicit sharing consent, approved research hosts, configured-price budgets, partial results and mocked provider tests; live account qualification pending |
+| Product comparison | Explicit evidenced attribute rules, coverage, unknown/mismatched facts and merchant mass/category restrictions; conditional hypothesis fit rather than purchase prediction |
+| Customer validation | Version-linked interview/survey/sample/sales/return observations, duplicate-study checks, preserved corrections and support/contradiction summaries |
+| Launch cash | MOQ/tier-aware batch cash with upfront VAT, samples, setup, ads, packaging, contingency and reserves; unknown amounts stay unknown |
 | Research | Targeted plan and evaluation, generic HTTPS receipt adapter, supplier CSV/JSON import, reviewed bundle intake, valid partial reports |
 | Economics | Three decimal-safe scenarios, dated FX, actual/volumetric billable mass, freight minima, explicit duties and VAT treatment, contribution margin |
 | Scoring | Six configurable criteria, coverage disclosure, computed economic rating, hard gates and explainable decisions |
@@ -14,7 +19,7 @@ The requirements document remains the product specification. This first implemen
 | Agent skills | Six portable project skills and a local metadata validator; live DSH discovery and invocation still need qualification |
 | Testing | Offline integration, independent cost fixtures, schema, imports, security and connector failure tests; see CI/local test output for measured results |
 | Pilot | Synthetic benchmark only; private historical Cozy Vibe BD data, withheld outcomes and manual claim audits are still needed |
-| Post-MVP | Search/discovery, scheduling, specialized marketplace APIs, automatic price extraction, MCP, dashboard, database and richer history comparisons are not implemented |
+| Remaining extensions | Automatic supplier shortlists/verified price extraction, scheduling, marketplace-specific APIs, MCP, dashboard, database and automatic profile-to-sales reconciliation are not implemented |
 
 The MVP in the specification is not declared complete until a tested DSH release is recorded and a real retrospective pilot and live-source audit pass. The 95% source-validity, unsupported-claim and commercial-signal targets are not measured by synthetic tests.
 

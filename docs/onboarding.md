@@ -1,5 +1,7 @@
 # Merchant onboarding
 
+For guided questions that create your own business settings directly, run `merchmind onboard --workspace workspaces/my-store`. An optional `--answers` JSON file supports repeatable intake. See `docs/merchant-journey.md` for the full five-step workflow. The manual demo-template path below remains available.
+
 Run `merchmind init --workspace workspaces/my-store`. Keep real merchant workspaces outside tracked source files. The generated workspace has an internal ignore-all file in addition to repository ignore rules.
 
 Edit `merchant.yaml`: set merchant identity, ISO country and currency codes, source countries, exact approved source hostnames, category restrictions, maximum product mass and target contribution margin. Freight rates must use the merchant base currency. Choose `per_gram` or `fixed_per_unit`; customs are explicitly excluded. Set VAT treatment to `expense`, `recoverable` or `unknown`. Unknown treatment blocks a complete cost estimate. Defaults are examples, not advice about Bangladesh import rules.

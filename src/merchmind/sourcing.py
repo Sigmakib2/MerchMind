@@ -44,7 +44,12 @@ def public_addresses(host: str) -> list[str]:
     addresses = sorted(
         {record[4][0] for record in socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)}
     )
-    if not addresses or any(not ipaddress.ip_address(a).is_global for a in addresses):
+    if not addresses or any(
+        not ipaddress.ip_address(a).is_global
+        or ipaddress.ip_address(a).is_multicast
+        or ipaddress.ip_address(a).is_reserved
+        for a in addresses
+    ):
         raise ValueError("DNS resolves to a non-public address")
     return addresses
 
